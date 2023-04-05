@@ -1,12 +1,17 @@
-import 'package:get_storage/get_storage.dart';
+import 'package:hydrated_riverpod/hydrated_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 import 'select_view.dart';
 import 'player_view.dart';
 import 'gm_view.dart';
 
 void main() async {
-  await GetStorage.init();
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  HydratedRiverpod.initialize(
+      storage: await HydratedStorage.build(
+          storageDirectory: await getApplicationDocumentsDirectory()));
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
