@@ -24,6 +24,11 @@ class _PlayerViewState extends State<PlayerView> {
     super.dispose();
   }
 
+  void _rollSkill(String skill, bool prof, bool exp, int bonus) {
+    //todo, ouput skill
+    return;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,6 +50,23 @@ class _PlayerViewState extends State<PlayerView> {
                 box.write("playerName", value);
               }),
             ),
+            Container(
+              height: 30,
+              width: 200,
+              color: Colors.yellow,
+              child: Center(
+                  child: FloatingActionButton(
+                heroTag: "SkillA",
+                onPressed: () {
+                  _rollSkill('str', false, false, 0);
+                },
+                foregroundColor: Colors.black,
+                backgroundColor: Colors.yellow,
+                elevation: 0,
+                tooltip: 'Roll Skill',
+                child: const Text('Skill A'),
+              )),
+            )
           ],
         ),
       ),
