@@ -8,9 +8,21 @@ class PlayerView extends StatefulWidget {
   State<PlayerView> createState() => _PlayerViewState();
 }
 
+class Skill {
+  String skillName = '';
+  bool prof = false;
+  bool expert = false;
+  int stat = 0;
+  Skill(this.skillName, this.prof, this.expert, this.stat);
+}
+
 class _PlayerViewState extends State<PlayerView> {
   final box = GetStorage();
   late String _playerName;
+  List<Skill> skillList = [
+    Skill("acrobatics", true, false, 1),
+    Skill("athletics", false, false, 0)
+  ]; //needs to be stored eventually
 
   @override
   void initState() {
@@ -34,7 +46,9 @@ class _PlayerViewState extends State<PlayerView> {
     return Scaffold(
       body: Center(
         child: Column(
-          children: [
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
             const Text("Welcome to the Player View page!",
                 style: TextStyle(fontSize: 24)),
             EditableText(
@@ -50,23 +64,16 @@ class _PlayerViewState extends State<PlayerView> {
                 box.write("playerName", value);
               }),
             ),
-            Container(
-              height: 30,
-              width: 200,
-              color: Colors.yellow,
-              child: Center(
-                  child: FloatingActionButton(
-                heroTag: "SkillA",
-                onPressed: () {
-                  _rollSkill('str', false, false, 0);
-                },
-                foregroundColor: Colors.black,
-                backgroundColor: Colors.yellow,
-                elevation: 0,
-                tooltip: 'Roll Skill',
-                child: const Text('Skill A'),
-              )),
-            )
+            SizedBox(
+                height: 400,
+                child: ListView.builder(
+                    itemCount: skillList.length,
+                    prototypeItem: ListTile(
+                      title: Text(skillList.first.skillName),
+                    ),
+                    itemBuilder: (context, index) {
+                      return ListTile(title: Text(skillList[index].skillName));
+                    }))
           ],
         ),
       ),
