@@ -1,10 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'providers.dart';
+import '../providers.dart';
 
 class HealthModifier extends ConsumerWidget {
-  HealthModifier(this._label, this._buttonColor, this._subtract, {super.key});
+  const HealthModifier(this._label, this._buttonColor, this._subtract,
+      {super.key});
   final String _label;
   final bool _subtract;
   final Color _buttonColor;
