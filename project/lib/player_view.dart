@@ -2,6 +2,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'editable_attribute.dart';
+import 'health_modifier.dart';
 import 'providers.dart';
 
 class Skill {
@@ -37,47 +38,54 @@ class PlayerView extends ConsumerWidget {
           children: <Widget>[
             const Text("Welcome to the Player View page!",
                 style: TextStyle(fontSize: 24)),
-            EditableAttribute<String>(nameProvider, "Player Name"),
-            EditableAttribute<int>(healthProvider, "HP:"),
-            SizedBox(
-                height: 400,
-                width: 400,
-                child: ListView.builder(
-                    itemCount: skillList.length,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          print("tapped on");
-                        },
-                        child: Container(
-                            alignment: Alignment.center,
-                            height: 40,
-                            decoration: BoxDecoration(),
-                            child: Column(
-                              children: [
-                                Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        skillList[index].skillName,
-                                        textAlign: TextAlign.left,
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          lastroll = _rollSkill(
-                                              skillList[index].skillName,
-                                              skillList[index].prof,
-                                              skillList[index].expert,
-                                              skillList[index].stat);
-                                        },
-                                        child: Text("$lastroll"),
-                                      )
-                                    ])
-                              ],
-                            )),
-                      );
-                    }))
+            EditableAttribute<String>(nameProvider, 32, "Player Name"),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                EditableAttribute<int>(healthProvider, 3, "HP:"),
+                SizedBox(
+                    height: 400,
+                    width: 400,
+                    child: ListView.builder(
+                        itemCount: skillList.length,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              print("tapped on");
+                            },
+                            child: Container(
+                                alignment: Alignment.center,
+                                height: 40,
+                                decoration: BoxDecoration(),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            skillList[index].skillName,
+                                            textAlign: TextAlign.left,
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              lastroll = _rollSkill(
+                                                  skillList[index].skillName,
+                                                  skillList[index].prof,
+                                                  skillList[index].expert,
+                                                  skillList[index].stat);
+                                            },
+                                            child: Text("$lastroll"),
+                                          )
+                                        ])
+                                  ],
+                                )),
+                          );
+                        })),
+                HealthModifier("Damage", Colors.red, true),
+                HealthModifier("Heal", Colors.green, false),
+              ],
+            ),
           ],
         ),
       ),
