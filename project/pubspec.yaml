@@ -38,6 +38,7 @@ dependencies:
   hydrated_riverpod: ^0.0.3
   flutter_riverpod: ^1.0.3+1
   path_provider: ^2.0.14
+  anydice: ^1.0.1
   camera: ^0.10.4
 
 dev_dependencies:

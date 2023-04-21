@@ -2,9 +2,11 @@ import 'package:hydrated_riverpod/hydrated_riverpod.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
-import 'select_view.dart';
-import 'player_view.dart';
-import 'gm_view.dart';
+
+import 'miles_widgets/camera_view.dart';
+import 'views/select_view.dart';
+import 'views/player_view.dart';
+import 'views/gm_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,7 +29,7 @@ class MyApp extends StatelessWidget {
           '/': (context) => const SelectView(),
           '/player_view': (context) => const PlayerView(),
           '/gm_view': (context) => const GmView(),
-          '/camera_view': (context) => CameraView(),
+          '/gm_view/camera_view': (context) => const CameraView(),
         });
   }
 }

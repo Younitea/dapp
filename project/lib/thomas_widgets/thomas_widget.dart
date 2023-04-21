@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
-import 'package:project/thomas_widgets/roll_skill.dart';
-import '../providers.dart';
+import '../shared/roll_skill.dart';
+import '../shared/providers.dart';
 import 'skill.dart';
 
 class ThomasWidget extends ConsumerWidget {
