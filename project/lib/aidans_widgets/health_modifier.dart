@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../providers.dart';
+import '../shared/providers.dart';
 
 class HealthModifier extends ConsumerWidget {
   const HealthModifier(this._label, this._buttonColor, this._subtract,
@@ -40,10 +40,10 @@ class HealthModifier extends ConsumerWidget {
                             keyboardType: TextInputType.number,
                             textAlign: TextAlign.center,
                             onSubmitted: (value) {
-                              ref.read(healthProvider.notifier).state +=
+                              ref.read(curHealthProvider.notifier).state +=
                                   (int.parse(value) * (_subtract ? -1 : 1));
-                              ref.read(healthProvider.notifier).state = ref
-                                  .watch(healthProvider.state)
+                              ref.read(curHealthProvider.notifier).state = ref
+                                  .watch(curHealthProvider.state)
                                   .state
                                   .clamp(0, 999);
                               Navigator.pop(context);
