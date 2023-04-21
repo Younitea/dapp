@@ -20,18 +20,18 @@ class ThomasWidget extends ConsumerWidget {
   }
 }
 
-class Button extends ConsumerWidget{
+class Button extends ThomasWidget {
   const Button(this.skill, {super.key});
 
   final Skill skill;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref){
+  Widget build(BuildContext context, WidgetRef ref) {
     return ListTile(
-      tileColor: Colors.orange, 
+      tileColor: Colors.orange,
       trailing: ElevatedButton(
         style: ElevatedButton.styleFrom(backgroundColor: Colors.lightBlue),
-        onPressed: (){
+        onPressed: () {
           ref.read(skillProvider.notifier).setProf(skill);
         },
         child: const Text('Swap Prof'),
@@ -43,13 +43,12 @@ class Button extends ConsumerWidget{
 class SkillNotifier extends StateNotifier<List<Skill>> {
   SkillNotifier() : super(const []);
   void setProf(Skill skill) {
-    state.map((skill){
-      return Skill(skill.skillName, !skill.prof, skill.expert, skill.stat)
-    })  .toList();
+    state.map((skill) {
+      return Skill(skill.skillName, !skill.prof, skill.expert, skill.stat);
+    }).toList();
   }
 }
 
- final provider =
-      StateNotifierProvider<SkillNotifier, List<Skill>>((ref) {
-    return SkillNotifier();
-  });
+final skillProvider = StateNotifierProvider<SkillNotifier, List<Skill>>((ref) {
+  return SkillNotifier();
+});
