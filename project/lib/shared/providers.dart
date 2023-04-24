@@ -2,12 +2,19 @@ import 'package:hydrated_riverpod/hydrated_riverpod.dart';
 import '../thomas_widgets/skill.dart';
 
 final nameProvider =
-    HydratedStateProvider((_) => "Tap to enter name", name: '_playerName');
+    HydratedStateProvider((_) => "Tap to enter name", name: '_name');
 
-final maxHealthProvider = HydratedStateProvider((_) => 0, name: '_mHealth');
-final curHealthProvider = HydratedStateProvider((_) => 0, name: '_cHealth');
-final armorClassProvider = HydratedStateProvider((_) => 0, name: '_armorClass');
-final initiativeProvider = HydratedStateProvider((_) => 0, name: '_initiative');
+final maxHealthProvider = HydratedStateProvider((_) => 0, name: '_mHP');
+final curHealthProvider = HydratedStateProvider((_) => 0, name: '_cHP');
+final armorClassProvider = HydratedStateProvider((_) => 0, name: '_ac');
+final initiativeProvider = HydratedStateProvider((_) => 0, name: '_init');
+final levelProvider = HydratedStateProvider((_) => 0, name: '_lvl');
+final strengthProvider = HydratedStateProvider((_) => 0, name: '_str');
+final dexterityProvider = HydratedStateProvider((_) => 0, name: '_dex');
+final constitutionProvider = HydratedStateProvider((_) => 0, name: '_con');
+final intelligenceProvider = HydratedStateProvider((_) => 0, name: '_int');
+final wisdomProvider = HydratedStateProvider((_) => 0, name: '_wis');
+final charismaProvider = HydratedStateProvider((_) => 0, name: '_cha');
 
 final skillProvider = HydratedStateProvider<List<Skill>>(
     (ref) => (<Skill>[
