@@ -1,19 +1,18 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import '../shared/providers.dart';
 import 'editable_attribute.dart';
 import 'attribute_display.dart';
 import 'initiative_roller.dart';
 import 'health_modifier.dart';
-import '../shared/providers.dart';
+import 'deathsave_roller.dart';
 
 class AidansWidget extends ConsumerWidget {
   const AidansWidget({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) => Column(children: [
-        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          EditableAttribute<String>(nameProvider, 32, 100, "Player Name"),
-          EditableAttribute<int>(levelProvider, 2, 50, "Lvl:"),
-        ]),
+        EditableAttribute<String>(nameProvider, 32, 500, "Player Name"),
+        EditableAttribute<int>(levelProvider, 2, 50, "Lvl:"),
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           EditableAttribute<int>(maxHealthProvider, 3, 75, "Max HP:"),
           AttributeDisplay(curHealthProvider, 100, "Current HP:"),
@@ -24,6 +23,7 @@ class AidansWidget extends ConsumerWidget {
           const InitiativeRoller(),
           EditableAttribute<int>(armorClassProvider, 2, 50, "AC:"),
         ]),
+        const DeathSaveRoller(),
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           EditableAttribute<int>(strengthProvider, 2, 50, "STR:"),
           EditableAttribute<int>(dexterityProvider, 2, 50, "DEX:"),
