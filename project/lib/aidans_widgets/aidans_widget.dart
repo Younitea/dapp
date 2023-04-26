@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import '../shared/providers.dart';
-import 'editable_attribute.dart';
+import '../shared/editable_attribute.dart';
 import 'attribute_display.dart';
 import 'initiative_roller.dart';
 import 'health_modifier.dart';
