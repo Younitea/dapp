@@ -17,7 +17,7 @@ final intelligenceProvider = HydratedStateProvider((_) => 0, name: '_int');
 final wisdomProvider = HydratedStateProvider((_) => 0, name: '_wis');
 final charismaProvider = HydratedStateProvider((_) => 0, name: '_cha');
 
-final skillProvider = HydratedStateProvider(
+/*final skillProvider = HydratedStateProvider(
     (ref) => <Skill>[
           Skill("Acrobatics", false, false, 0),
           Skill("Animal handling", false, false, 0),
@@ -39,3 +39,4 @@ final skillProvider = HydratedStateProvider(
           Skill("Survival", false, false, 0),
         ],
     name: '_skill');
+*/
