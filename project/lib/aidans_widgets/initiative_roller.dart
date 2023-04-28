@@ -59,8 +59,8 @@ class _InitiativeRollerState extends ConsumerState<InitiativeRoller> {
                       ElevatedButton(
                           onPressed: () {
                             ref.read(initiativeProvider.notifier).state =
-                                rollSkill(_bonusValue, _dropDownValue, false,
-                                    false, 1);
+                                rollSkill(_bonusValue, _dropDownValue,
+                                    ref.watch(dexterityProvider.state).state);
                             _bonusValue = "";
                             _dropDownValue = null;
                             Navigator.pop(context);
