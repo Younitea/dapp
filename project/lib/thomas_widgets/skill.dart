@@ -1,7 +1,7 @@
 class Skill {
-  String skillName = '';
-  int bonus = 0;
-  int stat = 0;
+  String skillName;
+  int bonus;
+  int stat;
   Skill(this.skillName, this.bonus, this.stat);
 
   Skill.fromJson(Map<String, dynamic> json)
@@ -12,7 +12,7 @@ class Skill {
   Map<String, dynamic> toJson() {
     return {
       'n': skillName,
-      'b': stat,
+      'b': bonus,
       's': stat,
     };
   }

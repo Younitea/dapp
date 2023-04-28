@@ -29,15 +29,14 @@ class Button extends ThomasWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListTile(
-      //leading:
-      //EditableAttribute<int>(skillProvider, 2, 50, "STR:"),
+      leading: Text("${skill.bonus}"),
       title: Text(skill.skillName),
       trailing: ElevatedButton(
         style: ElevatedButton.styleFrom(backgroundColor: Colors.lightBlue),
         onPressed: () {
           ref.read(skillProvider.notifier).bumpBonus(skill);
         },
-        child: const Text('Swap Prof'),
+        child: const Text('Bump Prof'),
       ),
     );
   }
@@ -76,7 +75,10 @@ class SkillNotifier extends HydratedStateNotifier<List<Skill>> {
 
   @override
   List<Skill> fromJson(Map<String, dynamic> json) =>
-      json['value '] as List<Skill>;
+      (json['value'] as List<dynamic>)
+          .map((skillJson) => Skill.fromJson(skillJson))
+          .toList();
+
   @override
   Map<String, List<Skill>> toJson(List<Skill> state) => {'value': state};
 }
