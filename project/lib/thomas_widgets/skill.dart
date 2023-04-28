@@ -1,7 +1,6 @@
 class Skill {
   String skillName = '';
-  bool prof = false;
-  bool expert = false;
+  int bonus = 0;
   int stat = 0;
-  Skill(this.skillName, this.prof, this.expert, this.stat);
+  Skill(this.skillName, this.bonus, this.stat);
 }
