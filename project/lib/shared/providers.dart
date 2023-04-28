@@ -17,26 +17,25 @@ final intelligenceProvider = HydratedStateProvider((_) => 0, name: '_int');
 final wisdomProvider = HydratedStateProvider((_) => 0, name: '_wis');
 final charismaProvider = HydratedStateProvider((_) => 0, name: '_cha');
 
-/*final skillProvider = HydratedStateProvider(
+final skillProvider = HydratedStateProvider(
     (ref) => <Skill>[
-          Skill("Acrobatics", false, false, 0),
-          Skill("Animal handling", false, false, 0),
-          Skill("Arcana", false, false, 0),
-          Skill("Athletics", false, false, 0),
-          Skill("Deception", false, false, 0),
-          Skill("History", false, false, 0),
-          Skill("Insight", false, false, 0),
-          Skill("Intimidation", false, false, 0),
-          Skill("Investigation", false, false, 0),
-          Skill("Medicine", false, false, 0),
-          Skill("Nature", false, false, 0),
-          Skill("Perception", false, false, 0),
-          Skill("Performance", false, false, 0),
-          Skill("Persuasion", false, false, 0),
-          Skill("Religon", false, false, 0),
-          Skill("Sleight of Hand", false, false, 0),
-          Skill("Stealth", false, false, 0),
-          Skill("Survival", false, false, 0),
+          Skill("Acrobatics", 0, 0),
+          Skill("Animal handling", 0, 0),
+          Skill("Arcana", 0, 0),
+          Skill("Athletics", 0, 0),
+          Skill("Deception", 0, 0),
+          Skill("History", 0, 0),
+          Skill("Insight", 0, 0),
+          Skill("Intimidation", 0, 0),
+          Skill("Investigation", 0, 0),
+          Skill("Medicine", 0, 0),
+          Skill("Nature", 0, 0),
+          Skill("Perception", 0, 0),
+          Skill("Performance", 0, 0),
+          Skill("Persuasion", 0, 0),
+          Skill("Religon", 0, 0),
+          Skill("Sleight of Hand", 0, 0),
+          Skill("Stealth", 0, 0),
+          Skill("Survival", 0, 0),
         ],
     name: '_skill');
-*/
