@@ -12,7 +12,7 @@ class InitiativeRoller extends ConsumerStatefulWidget {
 
 class _InitiativeRollerState extends ConsumerState<InitiativeRoller> {
   String? _dropDownValue;
-  String _bonusValue = "";
+  String? _bonusValue;
   @override
   Widget build(BuildContext context) => ElevatedButton(
       onPressed: () => showDialog(
@@ -37,7 +37,8 @@ class _InitiativeRollerState extends ConsumerState<InitiativeRoller> {
                             width: 75,
                             child: TextField(
                               textAlign: TextAlign.center,
-                              onSubmitted: (value) => _bonusValue = value,
+                              onSubmitted: (value) =>
+                                  _bonusValue = value != "" ? value : null,
                             ),
                           ),
                         ],
@@ -57,11 +58,13 @@ class _InitiativeRollerState extends ConsumerState<InitiativeRoller> {
                         ),
                       ),
                       ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             ref.read(initiativeProvider.notifier).state =
-                                rollSkill(_bonusValue, _dropDownValue,
-                                    ref.watch(dexterityProvider.state).state);
-                            _bonusValue = "";
+                                await rollSkill(
+                                    ref.watch(dexterityProvider.state).state,
+                                    _dropDownValue,
+                                    _bonusValue);
+                            _bonusValue = null;
                             _dropDownValue = null;
                             Navigator.pop(context);
                           },
