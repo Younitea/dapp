@@ -14,6 +14,7 @@ Future<int> rollSkill(int stat, String? advordis, String? bonus) async {
       start += " 1d20";
       break;
   }
-  return generateRandomValue(await AnyDiceWrapper.roll(start)) +
+  return stat +
+      generateRandomValue(await AnyDiceWrapper.roll(start)) +
       generateRandomValue(await AnyDiceWrapper.roll(bonus));
 }

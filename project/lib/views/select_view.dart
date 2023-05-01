@@ -22,7 +22,8 @@ class _SelectViewState extends State<SelectView> {
     return Scaffold(
         bottomNavigationBar: BottomNavigationBar(
             items: const [
-              BottomNavigationBarItem(icon: Icon(Icons.call), label: "Player"),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.person), label: "Player"),
               BottomNavigationBarItem(
                   icon: Icon(Icons.stop), label: "Game Master")
             ],

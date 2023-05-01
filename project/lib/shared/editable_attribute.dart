@@ -5,36 +5,49 @@ import 'package:flutter/services.dart';
 
 class EditableAttribute<T> extends ConsumerWidget {
   const EditableAttribute(
-      this._provider, this._maxLen, this._width, this._attributeLabel,
-      {super.key});
-  final HydratedStateProvider _provider;
-  final String _attributeLabel;
-  final int _maxLen;
-  final double _width;
+      {super.key,
+      required this.provider,
+      required this.maxLen,
+      required this.width,
+      this.fontSize,
+      this.attributeLabel,
+      this.alignment = TextAlign.start});
+  final HydratedStateProvider provider;
+  final int maxLen;
+  final double width;
+  final double? fontSize;
+  final String? attributeLabel;
+  final TextAlign alignment;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => SizedBox(
-        width: _width,
-        child: Column(
+        width: width,
+        child: Row(
           children: [
-            Text(_attributeLabel),
-            EditableText(
-                textAlign: TextAlign.center,
-                controller: TextEditingController(
-                    text: "${ref.watch(_provider.state).state}"),
-                focusNode: FocusNode(),
-                keyboardType: T == int ? TextInputType.number : null,
-                inputFormatters: <TextInputFormatter>[
-                      LengthLimitingTextInputFormatter(_maxLen)
-                    ] +
-                    (T == int ? [FilteringTextInputFormatter.digitsOnly] : []),
-                style: const TextStyle(
-                  color: Colors.black,
-                ),
-                cursorColor: Colors.black,
-                backgroundCursorColor: Colors.black,
-                onSubmitted: (value) => ref.read(_provider.notifier).state =
-                    T == int ? int.parse(value) : value),
+            if (attributeLabel != null)
+              Text(attributeLabel!, style: TextStyle(fontSize: fontSize)),
+            Flexible(
+              child: EditableText(
+                  textAlign: alignment,
+                  controller: TextEditingController(
+                      text: "${ref.watch(provider.state).state}"),
+                  focusNode: FocusNode(),
+                  keyboardType: T == int ? TextInputType.number : null,
+                  inputFormatters: <TextInputFormatter>[
+                        LengthLimitingTextInputFormatter(maxLen)
+                      ] +
+                      (T == int
+                          ? [FilteringTextInputFormatter.digitsOnly]
+                          : []),
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: fontSize,
+                  ),
+                  cursorColor: Colors.black,
+                  backgroundCursorColor: Colors.black,
+                  onSubmitted: (value) => ref.read(provider.notifier).state =
+                      T == int ? int.parse(value) : value),
+            ),
           ],
         ),
       );

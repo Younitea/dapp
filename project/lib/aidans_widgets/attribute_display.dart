@@ -3,19 +3,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 
 class AttributeDisplay extends ConsumerWidget {
-  const AttributeDisplay(this._provider, this._width, this._attributeLabel,
-      {super.key});
-  final HydratedStateProvider _provider;
-  final String _attributeLabel;
-  final double _width;
+  const AttributeDisplay(
+      {required this.provider,
+      required this.width,
+      required this.attributeLabel,
+      this.fontSize,
+      super.key});
+  final HydratedStateProvider provider;
+  final String attributeLabel;
+  final double? fontSize;
+  final double width;
   @override
   Widget build(BuildContext context, WidgetRef ref) => SizedBox(
-        width: _width,
-        child: Column(
-          children: [
-            Text(_attributeLabel),
-            Text("${ref.watch(_provider.state).state}"),
-          ],
-        ),
+        width: width,
+        child: Text("$attributeLabel${ref.watch(provider.state).state}",
+            style: TextStyle(fontSize: fontSize)),
       );
 }

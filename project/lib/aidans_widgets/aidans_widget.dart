@@ -11,28 +11,99 @@ class AidansWidget extends ConsumerWidget {
   const AidansWidget({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) => Column(children: [
-        EditableAttribute<String>(nameProvider, 32, 500, "Player Name"),
-        EditableAttribute<int>(levelProvider, 2, 50, "Lvl:"),
+        EditableAttribute<String>(
+          provider: nameProvider,
+          maxLen: 24,
+          width: 500,
+          fontSize: 32,
+          alignment: TextAlign.center,
+        ),
+        EditableAttribute<int>(
+          provider: levelProvider,
+          maxLen: 2,
+          width: 50,
+          attributeLabel: "LVL: ",
+        ),
+        const SizedBox(height: 10),
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          EditableAttribute<int>(maxHealthProvider, 3, 75, "Max HP:"),
-          AttributeDisplay(curHealthProvider, 100, "Current HP:"),
+          Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
+            EditableAttribute<int>(
+              provider: maxHealthProvider,
+              maxLen: 3,
+              width: 105,
+              fontSize: 18,
+              attributeLabel: "Max HP: ",
+            ),
+            AttributeDisplay(
+              provider: curHealthProvider,
+              width: 130,
+              fontSize: 18,
+              attributeLabel: "Current HP: ",
+            ),
+          ]),
+          const SizedBox(width: 5),
           const HealthModifier("Damage", Colors.red, true),
+          const SizedBox(width: 5),
           const HealthModifier("Heal", Colors.green, false),
         ]),
+        const DeathSaveRoller(),
+        const SizedBox(height: 10),
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           const InitiativeRoller(),
-          EditableAttribute<int>(armorClassProvider, 2, 50, "AC:"),
+          const SizedBox(width: 10),
+          EditableAttribute<int>(
+            provider: armorClassProvider,
+            maxLen: 2,
+            width: 75,
+            fontSize: 20,
+            attributeLabel: "AC: ",
+          ),
         ]),
-        const DeathSaveRoller(),
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          EditableAttribute<int>(strengthProvider, 2, 50, "STR:"),
-          EditableAttribute<int>(dexterityProvider, 2, 50, "DEX:"),
-          EditableAttribute<int>(constitutionProvider, 2, 50, "CON:"),
+          EditableAttribute<int>(
+            provider: strengthProvider,
+            maxLen: 2,
+            width: 75,
+            fontSize: 20,
+            attributeLabel: "STR: ",
+          ),
+          EditableAttribute<int>(
+            provider: dexterityProvider,
+            maxLen: 2,
+            width: 75,
+            fontSize: 20,
+            attributeLabel: "DEX: ",
+          ),
+          EditableAttribute<int>(
+            provider: constitutionProvider,
+            maxLen: 2,
+            width: 75,
+            fontSize: 20,
+            attributeLabel: "CON: ",
+          ),
         ]),
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          EditableAttribute<int>(intelligenceProvider, 2, 50, "INT:"),
-          EditableAttribute<int>(wisdomProvider, 2, 50, "WIS:"),
-          EditableAttribute<int>(charismaProvider, 2, 50, "CHA:"),
+          EditableAttribute<int>(
+            provider: intelligenceProvider,
+            maxLen: 2,
+            width: 75,
+            fontSize: 20,
+            attributeLabel: "INT: ",
+          ),
+          EditableAttribute<int>(
+            provider: wisdomProvider,
+            maxLen: 2,
+            width: 75,
+            fontSize: 20,
+            attributeLabel: "WIS: ",
+          ),
+          EditableAttribute<int>(
+            provider: charismaProvider,
+            maxLen: 2,
+            width: 75,
+            fontSize: 20,
+            attributeLabel: "CHA: ",
+          ),
         ]),
       ]);
 }

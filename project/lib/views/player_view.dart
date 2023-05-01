@@ -8,6 +8,9 @@ class PlayerView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => Scaffold(
+        appBar: AppBar(
+          title: const Text("Player View"),
+        ),
         body: Center(
           child: SingleChildScrollView(
             child: Column(
