@@ -78,4 +78,5 @@ class _CameraViewState extends State<CameraView> {
       ])
     ]));
   }
+
 }
