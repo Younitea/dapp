@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:project/views/gm_view.dart';
+import 'package:project/views/player_view.dart';
 
 class SelectView extends StatefulWidget {
   const SelectView({super.key});
@@ -8,27 +10,28 @@ class SelectView extends StatefulWidget {
 }
 
 class _SelectViewState extends State<SelectView> {
+  var _selectedIndex = 0;
+
+  static const _pages = <Widget>[
+    PlayerView(),
+    GmView(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text("Select View"),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-                onPressed: () => Navigator.pushNamed(context, '/player_view'),
-                child:
-                    const Text("Player View", style: TextStyle(fontSize: 36))),
-            ElevatedButton(
-                onPressed: () => Navigator.pushNamed(context, '/gm_view'),
-                child: const Text("GM View", style: TextStyle(fontSize: 36))),
-          ],
-        ),
-      ),
-    );
+        bottomNavigationBar: BottomNavigationBar(
+            items: const [
+              BottomNavigationBarItem(icon: Icon(Icons.call), label: "Player"),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.stop), label: "Game Master")
+            ],
+            currentIndex: _selectedIndex,
+            onTap: (idx) {
+              setState(() {
+                _selectedIndex = idx;
+              });
+            }),
+        body: _pages.elementAt(_selectedIndex));
   }
 }

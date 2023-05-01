@@ -27,9 +27,6 @@ class MyApp extends StatelessWidget {
         initialRoute: '/',
         routes: {
           '/': (context) => const SelectView(),
-          '/player_view': (context) => const PlayerView(),
-          '/gm_view': (context) => const GmView(),
-          '/gm_view/camera_view': (context) => const CameraView(),
-        });
+      });
   }
 }

@@ -172,7 +172,7 @@ class _DraggableWidgetState extends State<DraggableWidget>
   @override
   void didUpdateWidget(DraggableWidget oldWidget) {
     if (offstage == false) {
-      WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         final widgetSize = getWidgetSize(key);
         if (widgetSize != null) {
           setState(() {

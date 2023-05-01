@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:project/shared/roll_skill.dart';
+import 'fillable_colored_circle.dart';
 
 class DeathSaveRoller extends ConsumerStatefulWidget {
   const DeathSaveRoller({super.key});
@@ -8,32 +10,6 @@ class DeathSaveRoller extends ConsumerStatefulWidget {
   ConsumerState<DeathSaveRoller> createState() => _DeathSaveState();
 }
 
-final deathCircle = Container(
-  width: 40,
-  height: 40,
-  decoration: BoxDecoration(
-    //   color: Colors.red,
-    shape: BoxShape.circle,
-    border: Border.all(
-      color: Colors.red,
-      width: 2,
-    ),
-  ),
-);
-
-final lifeCircle = Container(
-  width: 40,
-  height: 40,
-  decoration: BoxDecoration(
-    //   color: Colors.green,
-    shape: BoxShape.circle,
-    border: Border.all(
-      color: Colors.green,
-      width: 2,
-    ),
-  ),
-);
-
 class _DeathSaveState extends ConsumerState<DeathSaveRoller> {
   int _numSuccess = 0;
   int _numFails = 0;
@@ -41,12 +17,28 @@ class _DeathSaveState extends ConsumerState<DeathSaveRoller> {
   @override
   Widget build(BuildContext context) =>
       Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        deathCircle,
-        deathCircle,
-        deathCircle,
-        ElevatedButton(onPressed: () => null, child: const Text("Death Save")),
-        lifeCircle,
-        lifeCircle,
-        lifeCircle
+        FillableColoredCircle(Colors.red, _numFails, 1),
+        FillableColoredCircle(Colors.red, _numFails, 2),
+        FillableColoredCircle(Colors.red, _numFails, 3),
+        ElevatedButton(
+            onPressed: () async {
+              if (_numSuccess == 3 || _numFails == 3) {
+                setState(() {
+                  _numSuccess = 0;
+                  _numFails = 0;
+                });
+              } else {
+                int roll = await rollSkill(0, null, null);
+                if (roll < 10) {
+                  setState(() => _numFails++);
+                } else {
+                  setState(() => _numSuccess++);
+                }
+              }
+            },
+            child: const Text("Death Save")),
+        FillableColoredCircle(Colors.green, _numSuccess, 3),
+        FillableColoredCircle(Colors.green, _numSuccess, 2),
+        FillableColoredCircle(Colors.green, _numSuccess, 1)
       ]);
 }
