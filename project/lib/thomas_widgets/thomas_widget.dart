@@ -29,16 +29,29 @@ class Button extends ThomasWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListTile(
-      leading: Text("${skill.bonus}"),
-      title: Text(skill.skillName),
-      trailing: ElevatedButton(
-        style: ElevatedButton.styleFrom(backgroundColor: Colors.lightBlue),
-        onPressed: () {
-          ref.read(skillProvider.notifier).bumpBonus(skill);
-        },
-        child: const Text('Bump Prof'),
-      ),
-    );
+        leading: Text("${(skill.bonus + skill.stat)}"),
+        title: Text(skill.skillName),
+        trailing: Wrap(
+          spacing: 10,
+          children: [
+            ElevatedButton(
+              style:
+                  ElevatedButton.styleFrom(backgroundColor: Colors.lightBlue),
+              onPressed: () {
+                ref.read(skillProvider.notifier).bumpBonus(skill);
+              },
+              child: const Text('Bump'),
+            ),
+            ElevatedButton(
+              style:
+                  ElevatedButton.styleFrom(backgroundColor: Colors.lightBlue),
+              onPressed: () {
+                ref.read(skillProvider.notifier).debumpBonus(skill);
+              },
+              child: const Text('DeBump'),
+            ),
+          ],
+        ));
   }
 }
 
@@ -69,6 +82,15 @@ class SkillNotifier extends HydratedStateNotifier<List<Skill>> {
     state = state.map((skill) {
       return skill.skillName == name
           ? Skill(name, (skill.bonus + 1), skill.stat)
+          : skill;
+    }).toList();
+  }
+
+  void debumpBonus(Skill skill) {
+    final name = skill.skillName;
+    state = state.map((skill) {
+      return skill.skillName == name
+          ? Skill(name, (skill.bonus - 1), skill.stat)
           : skill;
     }).toList();
   }
