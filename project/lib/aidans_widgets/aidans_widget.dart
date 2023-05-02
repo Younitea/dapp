@@ -24,7 +24,7 @@ class AidansWidget extends ConsumerWidget {
           width: 50,
           attributeLabel: "LVL: ",
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 20),
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
             EditableAttribute<int>(
@@ -47,7 +47,7 @@ class AidansWidget extends ConsumerWidget {
           const HealthModifier("Heal", Colors.green, false),
         ]),
         const DeathSaveRoller(),
-        const SizedBox(height: 10),
+        const SizedBox(height: 20),
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           const InitiativeRoller(),
           const SizedBox(width: 10),

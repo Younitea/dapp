@@ -78,5 +78,6 @@ class _InitiativeRollerState extends ConsumerState<InitiativeRoller> {
                   child: const Icon(Icons.arrow_back)),
             ),
           ),
+      onLongPress: () => ref.read(initiativeProvider.notifier).state = 0,
       child: Text("Initiative: ${ref.watch(initiativeProvider.state).state}"));
 }

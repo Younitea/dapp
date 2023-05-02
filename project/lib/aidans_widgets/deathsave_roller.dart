@@ -36,6 +36,12 @@ class _DeathSaveState extends ConsumerState<DeathSaveRoller> {
                 }
               }
             },
+            onLongPress: () {
+              setState(() {
+                _numSuccess = 0;
+                _numFails = 0;
+              });
+            },
             child: const Text("Death Save")),
         FillableColoredCircle(Colors.green, _numSuccess, 3),
         FillableColoredCircle(Colors.green, _numSuccess, 2),
