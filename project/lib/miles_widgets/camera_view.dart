@@ -57,26 +57,34 @@ class _CameraViewState extends State<CameraView> {
 
     return Scaffold(
         body: Column(children: [
-      Expanded(child: CameraPreview(controller)),
-      Row(children: [
-        ElevatedButton(
-            onPressed: () async {
-              var pic = await controller.takePicture();
+      Expanded(
+          child: Container(
+              width: double.infinity,
+              height: double.infinity,
+              child: CameraPreview(controller))),
+      Row(mainAxisSize: MainAxisSize.max, children: [
+        Expanded(
+            child: Container(
+          height: 256.0,
+          decoration: const BoxDecoration(color: Colors.black),
+          child: Align(
+              alignment: Alignment.center,
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: Colors.black,
+                      padding: const EdgeInsets.all(24.0),
+                      shape: const CircleBorder()),
+                  onPressed: () async {
+                    var pic = await controller.takePicture();
 
-              setState(() {
-                savedImageFile = pic.path;
-              });
-            },
-            child: const Icon(Icons.camera)),
-        (() {
-          if (savedImageFile != null) {
-            return Expanded(child: Image.file(File(savedImageFile!)));
-          } else {
-            return const Expanded(child: Text("imageWillGoHere"));
-          }
-        })()
-      ])
+                    setState(() {
+                      savedImageFile = pic.path;
+                    });
+                  },
+                  child: const Icon(Icons.camera))),
+        ))
+      ]),
     ]));
   }
-
 }
