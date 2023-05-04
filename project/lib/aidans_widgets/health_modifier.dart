@@ -41,7 +41,8 @@ class HealthModifier extends ConsumerWidget {
                             textAlign: TextAlign.center,
                             onSubmitted: (value) {
                               ref.read(curHealthProvider.notifier).state +=
-                                  (int.parse(value) * (_subtract ? -1 : 1));
+                                  ((int.tryParse(value) ?? 0) *
+                                      (_subtract ? -1 : 1));
                               ref.read(curHealthProvider.notifier).state = ref
                                   .watch(curHealthProvider.state)
                                   .state

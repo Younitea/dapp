@@ -37,10 +37,10 @@ class _SavingThrowerState extends ConsumerState<SavingThrower> {
                       children: [
                         const Text("Bonus: "),
                         SizedBox(
-                          width: 50,
+                          width: 25,
                           child: TextField(
                               inputFormatters: [
-                                LengthLimitingTextInputFormatter(3),
+                                LengthLimitingTextInputFormatter(2),
                                 FilteringTextInputFormatter.digitsOnly
                               ],
                               keyboardType: TextInputType.number,
