@@ -1,4 +1,5 @@
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:project/miles_widgets/camera_view.dart';
 
 import 'draggable_widget.dart';
@@ -38,22 +39,55 @@ class StatDisplay extends StatelessWidget {
   }
 }
 
-class ResistanceSwitch extends StatelessWidget {
-  const ResistanceSwitch(
+class ResistanceImmunitySwitch extends StatelessWidget {
+  const ResistanceImmunitySwitch(
       {super.key,
+      required this.idx,
       required this.name,
       required this.checked,
       required this.onChanged});
 
-  final Function(bool) onChanged;
+  final int idx;
+  final Function(int) onChanged;
   final String name;
-  final bool checked;
+  final bool Function(int) checked;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [Text(name), Switch(value: checked, onChanged: onChanged)],
+      children: [
+        Text(name),
+        Row(
+          children: [
+            Switch(value: checked(idx), onChanged: (_) => onChanged(idx)),
+            Switch(
+                value: checked(idx + 13), onChanged: (_) => onChanged(idx + 13))
+          ],
+        )
+      ],
+    );
+  }
+}
+
+class StatEditor extends StatelessWidget {
+  const StatEditor({super.key, required this.name, required this.controller});
+
+  final String name;
+  final TextEditingController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: name,
+      ),
+      keyboardType: TextInputType.number,
+      inputFormatters: [
+        FilteringTextInputFormatter.digitsOnly,
+        LengthLimitingTextInputFormatter(2)
+      ],
     );
   }
 }
@@ -73,7 +107,25 @@ class _MonsterViewState extends ConsumerState<MonsterEditor> {
   bool _isEditing = false;
   int _resistances = 0;
 
+  final _strController = TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
+
+  static const RESISTANCES = [
+    "Acid",
+    "Cold",
+    "Fire",
+    "Force",
+    "Lightning",
+    "Necrotic",
+    "Poison",
+    "Psychic",
+    "Radiant",
+    "Thunder",
+    "Bludgeoning",
+    "Slashing",
+    "Piercing"
+  ];
 
   @override
   void initState() {
@@ -82,10 +134,24 @@ class _MonsterViewState extends ConsumerState<MonsterEditor> {
     _isEditing = widget.isEditing;
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    _strController.dispose();
+  }
+
   _setResistance(int idx) {
     setState(() {
       _resistances ^= (1 << idx);
     });
+  }
+
+  _setImmunity(int idx) {
+    _resistances ^= (1 << (13 + idx));
+  }
+
+  bool _getImmunity(int idx) {
+    return (_resistances & (1 << (13 + idx))) != 0;
   }
 
   bool _getResistance(int idx) {
@@ -95,15 +161,15 @@ class _MonsterViewState extends ConsumerState<MonsterEditor> {
   @override
   Widget build(BuildContext context) {
     if (_isEditing) {
-      return Container(
-          height: MediaQuery.of(context).size.height * 0.7,
-          child: SingleChildScrollView(
-              child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Form(
-                child: Column(children: [
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Form(
+          child: Column(
+            children: [
               TextFormField(
-                decoration: InputDecoration(hintText: "Name"),
+                decoration: InputDecoration(
+                  labelText: "Name",
+                ),
                 // The validator receives the text that the user has entered.
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -126,6 +192,26 @@ class _MonsterViewState extends ConsumerState<MonsterEditor> {
               ),
               Row(
                 children: [
+                  Expanded(
+                    child: Table(
+                      children: [
+                        TableRow(children: [
+                          StatEditor(name: "STR", controller: _strController),
+                          StatEditor(name: "DEX", controller: _strController),
+                          StatEditor(name: "CON", controller: _strController),
+                        ]),
+                        TableRow(children: [
+                          StatEditor(name: "INT", controller: _strController),
+                          StatEditor(name: "WIS", controller: _strController),
+                          StatEditor(name: "CHA", controller: _strController),
+                        ])
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
                   const Text(
                     "Resistances:",
                     style: TextStyle(
@@ -136,58 +222,20 @@ class _MonsterViewState extends ConsumerState<MonsterEditor> {
                 ],
               ),
               const SizedBox(height: 10),
-              ResistanceSwitch(
-                  name: "Acid",
-                  checked: _getResistance(0),
-                  onChanged: (_) => _setResistance(0)),
-              ResistanceSwitch(
-                  name: "Cold",
-                  checked: _getResistance(1),
-                  onChanged: (_) => _setResistance(1)),
-              ResistanceSwitch(
-                  name: "Fire",
-                  checked: _getResistance(2),
-                  onChanged: (_) => _setResistance(2)),
-              ResistanceSwitch(
-                  name: "Force",
-                  checked: _getResistance(3),
-                  onChanged: (_) => _setResistance(3)),
-              ResistanceSwitch(
-                  name: "Lightning",
-                  checked: _getResistance(4),
-                  onChanged: (_) => _setResistance(4)),
-              ResistanceSwitch(
-                  name: "Necrotic",
-                  checked: _getResistance(5),
-                  onChanged: (_) => _setResistance(5)),
-              ResistanceSwitch(
-                  name: "Poison",
-                  checked: _getResistance(6),
-                  onChanged: (_) => _setResistance(6)),
-              ResistanceSwitch(
-                  name: "Psychic",
-                  checked: _getResistance(7),
-                  onChanged: (_) => _setResistance(7)),
-              ResistanceSwitch(
-                  name: "Radiant",
-                  checked: _getResistance(8),
-                  onChanged: (_) => _setResistance(8)),
-              ResistanceSwitch(
-                  name: "Thunder",
-                  checked: _getResistance(9),
-                  onChanged: (_) => _setResistance(9)),
-              ResistanceSwitch(
-                  name: "Bludgeoning",
-                  checked: _getResistance(10),
-                  onChanged: (_) => _setResistance(10)),
-              ResistanceSwitch(
-                  name: "Slashing",
-                  checked: _getResistance(11),
-                  onChanged: (_) => _setResistance(11)),
-              ResistanceSwitch(
-                  name: "Piercing",
-                  checked: _getResistance(12),
-                  onChanged: (_) => _setResistance(12)),
+              ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: RESISTANCES.length,
+                itemBuilder: (context, i) {
+                  return ResistanceImmunitySwitch(
+                    name: RESISTANCES[i],
+                    idx: i,
+                    checked: _getResistance,
+                    onChanged: _setResistance,
+                  );
+                },
+              ),
+              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -201,53 +249,54 @@ class _MonsterViewState extends ConsumerState<MonsterEditor> {
                       child: Text("Delete"))
                 ],
               )
-            ])),
-          )));
-    }
-
-    return Container(
-        height: MediaQuery.of(context).size.height * 0.7,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Monster Name",
-                    style:
-                        TextStyle(fontSize: 32, fontWeight: FontWeight.normal),
-                  ),
-                  TextButton(
-                      onPressed: () {
-                        setState(() {
-                          _isEditing = true;
-                        });
-                      },
-                      child: const Text("Edit"))
-                ],
-              ),
-              const SizedBox(height: 10),
-              Row(children: [HPDisplay()]),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  Expanded(
-                      child: Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: StatDisplay()))
-                ],
-              ),
-              Expanded(
-                  child: Align(
-                alignment: Alignment.bottomCenter,
-                child: ElevatedButton(
-                    onPressed: () {}, child: Text("Attack Roll")),
-              ))
             ],
           ),
+        ),
+      );
+    }
+
+    return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Unit Name",
+                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.normal),
+                ),
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _isEditing = true;
+                    });
+                  },
+                  child: const Text("Edit"),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(children: [HPDisplay()]),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Expanded(
+                    child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: StatDisplay()))
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(onPressed: () {}, child: Text("Attack Roll")),
+              ],
+            )
+          ],
         ));
+    // ],
+    // );
   }
 }
 
@@ -312,7 +361,7 @@ class _MilesWidgetState extends ConsumerState<MilesWidget> {
           const SizedBox(width: 8),
           FloatingActionButton(
             onPressed: () {
-              _newUnitPopupSheet(context);
+              _unitPopupSheet(context, -1);
             },
             child: const Icon(Icons.add),
           ),
@@ -323,28 +372,38 @@ class _MilesWidgetState extends ConsumerState<MilesWidget> {
             child: ElevatedButton(
           child: const Text("test popup"),
           onPressed: () {
-            _unitPopupSheet(context);
+            _unitPopupSheet(context, 0);
           },
         )),
       ]),
     );
   }
 
-  void _newUnitPopupSheet(BuildContext context) {
+  void _unitPopupSheet(BuildContext context, int id) {
     showModalBottomSheet(
         context: context,
+        isScrollControlled: true,
         builder: (BuildContext ctx) {
-          return MonsterEditor(
-            monsterId: -1,
+          return DraggableScrollableSheet(
+            expand: false,
+            maxChildSize: 0.7,
+            builder: (context, scrollController) {
+              return SingleChildScrollView(
+                padding: EdgeInsets.all(4),
+                child: MonsterEditor(
+                  monsterId: id,
+                ),
+                // child: Column(
+                //   children: [
+                //     Row(
+                //       children: [Text("data")],
+                //     )
+                //   ],
+                // ),
+                controller: scrollController,
+              );
+            },
           );
-        });
-  }
-
-  void _unitPopupSheet(BuildContext context) {
-    showModalBottomSheet(
-        context: context,
-        builder: (BuildContext ctx) {
-          return MonsterEditor(monsterId: 0);
         });
   }
 }
