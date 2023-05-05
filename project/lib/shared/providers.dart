@@ -16,3 +16,5 @@ final wisdomProvider = HydratedStateProvider((_) => 0, name: '_wis');
 final charismaProvider = HydratedStateProvider((_) => 0, name: '_cha');
 
 final skillRollProvider = HydratedStateProvider((_) => 0, name: '_skillRoll');
+final hitDice = HydratedStateProvider((_) => 10, name: '_hD');
+final hitDiceCount = HydratedStateProvider((_) => 0, name: '_hDC');
