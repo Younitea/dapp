@@ -12,6 +12,51 @@ class ThomasWidget extends ConsumerWidget {
     final skillList = ref.watch(skillProvider);
     return Column(
       children: [
+        Text("Hitdice Remaining: ${ref.watch(hitDiceCount.state).state}"),
+        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.lightBlue),
+            onPressed: () async {
+              if (ref.read(hitDiceCount) > 0) {
+                ref.read(curHealthProvider.notifier).state = await rollSkill(
+                        ((ref.read(constitutionProvider) - 10) ~/ 2),
+                        'none',
+                        "1d${ref.read(hitDice)}") +
+                    ref.read(curHealthProvider);
+                if (ref.read(curHealthProvider) > ref.read(maxHealthProvider)) {
+                  ref.read(curHealthProvider.notifier).state =
+                      ref.read(maxHealthProvider);
+                }
+                ref.read(hitDiceCount.notifier).state =
+                    ref.read(hitDiceCount) - 1;
+              }
+            },
+            child: const Icon(Icons.fastfood),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.lightBlue),
+            onPressed: () => {
+              ref.read(initiativeProvider.notifier).state = 0,
+              ref.read(curHealthProvider.notifier).state =
+                  ref.read(maxHealthProvider),
+              ref.read(hitDiceCount.notifier).state = ref.read(levelProvider)
+            },
+            child: const Icon(Icons.bed),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.lightBlue),
+            onPressed: () =>
+                {ref.read(hitDice.notifier).state = ref.read(hitDice) - 2},
+            child: const Icon(Icons.exposure_minus_2_sharp),
+          ),
+          Text("d${ref.watch(hitDice.state).state}"),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.lightBlue),
+            onPressed: () =>
+                {ref.read(hitDice.notifier).state = ref.read(hitDice) + 2},
+            child: const Icon(Icons.exposure_plus_2_sharp),
+          ),
+        ]),
         Text("Output: ${ref.watch(skillRollProvider.state).state}"),
         SizedBox(
             height: 400,
