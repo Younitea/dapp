@@ -68,7 +68,7 @@ class _InitiativeRollerState extends ConsumerState<InitiativeRoller> {
                             _dropDownValue = null;
                             Navigator.pop(context);
                           },
-                          child: const Text("ROLL!")),
+                          child: const Text("Roll!")),
                     ],
                   ),
                 ),

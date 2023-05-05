@@ -28,7 +28,7 @@ class _DeathSaveState extends ConsumerState<DeathSaveRoller> {
                   _numFails = 0;
                 });
               } else {
-                int roll = await rollSkill(0, null, null);
+                int roll = await rollSkill();
                 if (roll < 10) {
                   setState(() => _numFails++);
                 } else {

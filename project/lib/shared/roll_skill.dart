@@ -1,6 +1,6 @@
 import 'package:anydice/anydice.dart';
 
-Future<int> rollSkill(int stat, String? advordis, String? bonus) async {
+Future<int> rollSkill([int stat = 0, String? advordis, String? bonus]) async {
   String start = "output";
   bonus = "output ${bonus ?? "0"}";
   switch (advordis) {
