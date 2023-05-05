@@ -20,12 +20,14 @@ class SavedAttack extends ConsumerWidget {
               body: Center(
                 child: Container(
                   width: 100,
-                  height: 100,
+                  height: 75,
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                   ),
-                  child: Text("Result: $result"),
+                  child: Center(
+                    child: Text("Result: $result"),
+                  ),
                 ),
               ),
               floatingActionButton: FloatingActionButton(
@@ -41,8 +43,8 @@ class SavedAttack extends ConsumerWidget {
             backgroundColor: Colors.transparent,
             body: Center(
               child: Container(
-                width: 100,
-                height: 100,
+                width: 200,
+                height: 75,
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.all(Radius.circular(20)),

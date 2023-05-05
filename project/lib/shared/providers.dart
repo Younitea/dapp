@@ -20,3 +20,5 @@ final savedAttackTwoProvider =
     HydratedStateProvider((_) => "No saved attack", name: "_savedAttackTwo");
 final savedAttackThreeProvider =
     HydratedStateProvider((_) => "No saved attack", name: "_savedAttackThree");
+final hitDice = HydratedStateProvider((_) => 10, name: '_hD');
+final hitDiceCount = HydratedStateProvider((_) => 0, name: '_hDC');

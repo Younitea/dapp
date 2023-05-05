@@ -10,6 +10,9 @@ Future<int> rollSkill([int stat = 0, String? advordis, String? bonus]) async {
     case 'dis':
       start += " [lowest 1 of 2d20]";
       break;
+    case 'none':
+      start += " 0";
+      break;
     case null:
       start += " 1d20";
       break;
