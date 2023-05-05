@@ -105,7 +105,9 @@ class _SavingThrowerState extends ConsumerState<SavingThrower> {
                             _bonusValue = null;
                             _dropDownValue = null;
                           });
+                          // ignore: use_build_context_synchronously
                           Navigator.pop(context);
+                          // ignore: use_build_context_synchronously
                           showDialog(
                             context: context,
                             builder: (BuildContext context) => Scaffold(

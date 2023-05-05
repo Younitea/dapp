@@ -6,6 +6,7 @@ import 'attribute_display.dart';
 import 'initiative_roller.dart';
 import 'health_modifier.dart';
 import 'deathsave_roller.dart';
+import 'saved_attack.dart';
 import 'saving_thrower.dart';
 
 class AidansWidget extends ConsumerWidget {
@@ -106,6 +107,9 @@ class AidansWidget extends ConsumerWidget {
             attributeLabel: "CHA: ",
           ),
         ]),
-        SavingThrower(),
+        const SavingThrower(),
+        SavedAttack(savedAttackOneProvider),
+        SavedAttack(savedAttackTwoProvider),
+        SavedAttack(savedAttackThreeProvider),
       ]);
 }
