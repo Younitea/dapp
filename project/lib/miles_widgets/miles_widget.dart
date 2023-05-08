@@ -1,331 +1,17 @@
+import 'dart:io';
+
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:project/miles_widgets/camera_view.dart';
+import 'package:project/miles_widgets/unit_display.dart';
+import 'package:project/miles_widgets/unit_editor.dart';
+import 'package:project/thomas_widgets/thomas_widget.dart';
 
 import 'draggable_widget.dart';
+import 'unit_marker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
-
-class StatDisplay extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Table(
-      border: TableBorder.all(),
-      children: [
-        TableRow(children: [
-          Padding(
-              padding: EdgeInsets.all(6.0),
-              child: Text("STR: 69", style: TextStyle(fontSize: 20.0))),
-          Padding(
-              padding: EdgeInsets.all(6.0),
-              child: Text("DEX: 69", style: TextStyle(fontSize: 20.0))),
-          Padding(
-              padding: EdgeInsets.all(6.0),
-              child: Text("CON: 69", style: TextStyle(fontSize: 20.0))),
-        ]),
-        TableRow(children: [
-          Padding(
-              padding: EdgeInsets.all(6.0),
-              child: Text("INT: 69", style: TextStyle(fontSize: 20.0))),
-          Padding(
-              padding: EdgeInsets.all(6.0),
-              child: Text("WIS: 69", style: TextStyle(fontSize: 20.0))),
-          Padding(
-              padding: EdgeInsets.all(6.0),
-              child: Text("CHA: 69", style: TextStyle(fontSize: 20.0))),
-        ]),
-      ],
-    );
-  }
-}
-
-class ResistanceImmunitySwitch extends StatelessWidget {
-  const ResistanceImmunitySwitch(
-      {super.key,
-      required this.idx,
-      required this.name,
-      required this.checked,
-      required this.onChanged});
-
-  final int idx;
-  final Function(int) onChanged;
-  final String name;
-  final bool Function(int) checked;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(name),
-        Row(
-          children: [
-            Switch(value: checked(idx), onChanged: (_) => onChanged(idx)),
-            Switch(
-                value: checked(idx + 13), onChanged: (_) => onChanged(idx + 13))
-          ],
-        )
-      ],
-    );
-  }
-}
-
-class StatEditor extends StatelessWidget {
-  const StatEditor({super.key, required this.name, required this.controller});
-
-  final String name;
-  final TextEditingController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      decoration: InputDecoration(
-        labelText: name,
-      ),
-      keyboardType: TextInputType.number,
-      inputFormatters: [
-        FilteringTextInputFormatter.digitsOnly,
-        LengthLimitingTextInputFormatter(2)
-      ],
-    );
-  }
-}
-
-class MonsterEditor extends ConsumerStatefulWidget {
-  const MonsterEditor(
-      {super.key, required this.monsterId, this.isEditing = false});
-
-  final int monsterId;
-  final bool isEditing;
-
-  @override
-  _MonsterViewState createState() => _MonsterViewState();
-}
-
-class _MonsterViewState extends ConsumerState<MonsterEditor> {
-  bool _isEditing = false;
-  int _resistances = 0;
-
-  final _strController = TextEditingController();
-
-  final _formKey = GlobalKey<FormState>();
-
-  static const RESISTANCES = [
-    "Acid",
-    "Cold",
-    "Fire",
-    "Force",
-    "Lightning",
-    "Necrotic",
-    "Poison",
-    "Psychic",
-    "Radiant",
-    "Thunder",
-    "Bludgeoning",
-    "Slashing",
-    "Piercing"
-  ];
-
-  @override
-  void initState() {
-    super.initState();
-
-    _isEditing = widget.isEditing;
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _strController.dispose();
-  }
-
-  _setResistance(int idx) {
-    setState(() {
-      _resistances ^= (1 << idx);
-    });
-  }
-
-  _setImmunity(int idx) {
-    _resistances ^= (1 << (13 + idx));
-  }
-
-  bool _getImmunity(int idx) {
-    return (_resistances & (1 << (13 + idx))) != 0;
-  }
-
-  bool _getResistance(int idx) {
-    return (_resistances & (1 << idx)) != 0;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (_isEditing) {
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Form(
-          child: Column(
-            children: [
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: "Name",
-                ),
-                // The validator receives the text that the user has entered.
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a valid name';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  const Text(
-                    "Stats:",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18.0,
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Table(
-                      children: [
-                        TableRow(children: [
-                          StatEditor(name: "STR", controller: _strController),
-                          StatEditor(name: "DEX", controller: _strController),
-                          StatEditor(name: "CON", controller: _strController),
-                        ]),
-                        TableRow(children: [
-                          StatEditor(name: "INT", controller: _strController),
-                          StatEditor(name: "WIS", controller: _strController),
-                          StatEditor(name: "CHA", controller: _strController),
-                        ])
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  const Text(
-                    "Resistances:",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18.0,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: RESISTANCES.length,
-                itemBuilder: (context, i) {
-                  return ResistanceImmunitySwitch(
-                    name: RESISTANCES[i],
-                    idx: i,
-                    checked: _getResistance,
-                    onChanged: _setResistance,
-                  );
-                },
-              ),
-              const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(onPressed: () {}, child: Text("Save")),
-                  const SizedBox(width: 10),
-                  ElevatedButton(
-                      style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStatePropertyAll(Colors.red)),
-                      onPressed: () {},
-                      child: Text("Delete"))
-                ],
-              )
-            ],
-          ),
-        ),
-      );
-    }
-
-    return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Unit Name",
-                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.normal),
-                ),
-                TextButton(
-                  onPressed: () {
-                    setState(() {
-                      _isEditing = true;
-                    });
-                  },
-                  child: const Text("Edit"),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Row(children: [HPDisplay()]),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                Expanded(
-                    child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: StatDisplay()))
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(onPressed: () {}, child: Text("Attack Roll")),
-              ],
-            )
-          ],
-        ));
-    // ],
-    // );
-  }
-}
-
-class HPDisplay extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-        child: Stack(alignment: Alignment.center, children: [
-      Positioned(
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          child: Column(
-            children: [
-              Expanded(
-                  child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.red,
-                    borderRadius: BorderRadius.all(Radius.circular(4.0))),
-              ))
-            ],
-          )),
-      Text("HP: 45/100",
-          style: TextStyle(
-              color: Colors.white, fontSize: 24.0, fontWeight: FontWeight.bold))
-    ]));
-  }
-}
 
 class MilesWidget extends ConsumerStatefulWidget {
   const MilesWidget({super.key});
@@ -334,7 +20,7 @@ class MilesWidget extends ConsumerStatefulWidget {
 }
 
 class _MilesWidgetState extends ConsumerState<MilesWidget> {
-  final _dragController = DragController();
+  final List<UnitData> _units = [];
 
   Route _createCameraRoute() {
     return MaterialPageRoute(
@@ -343,8 +29,60 @@ class _MilesWidgetState extends ConsumerState<MilesWidget> {
     );
   }
 
+  Directory? appDir;
+
+  @override
+  void initState() {
+    super.initState();
+
+    getApplicationDocumentsDirectory().then((dir) {
+      setState(() {
+        appDir = dir;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (appDir == null) return const SizedBox();
+
+    File imageFile = File("${appDir!.path}/image.png");
+
+    List<Widget> floatingDoodads = _units.asMap().entries.map<Widget>((entry) {
+      var idx = entry.key;
+
+      return DraggableWidget(
+        initialOffset: const Offset(0, 0),
+        child: UnitMarker(
+          name: entry.value.name,
+          selected: false,
+          onSelect: () {
+            _unitPopupSheet(context, -1);
+          },
+          onPress: () {
+            _unitPopupSheet(context, -1);
+          },
+        ),
+      );
+    }).toList();
+
+    if (!imageFile.existsSync()) {
+      floatingDoodads.insert(
+          0,
+          const SizedBox(
+            width: 1024.0,
+            height: 1024.0,
+          ));
+    } else {
+      floatingDoodads.insert(
+          0,
+          Image.file(
+            imageFile,
+            height: 1024.0,
+            width: 1024.0,
+          ));
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("GM View"),
@@ -353,57 +91,106 @@ class _MilesWidgetState extends ConsumerState<MilesWidget> {
         direction: Axis.horizontal,
         children: [
           FloatingActionButton(
+            heroTag: "camera_button",
             onPressed: () {
-              Navigator.of(context).push(_createCameraRoute());
+              Navigator.of(context)
+                  .push(_createCameraRoute())
+                  .whenComplete(() => setState(() {}));
             },
             child: const Icon(Icons.add_a_photo),
           ),
           const SizedBox(width: 8),
           FloatingActionButton(
+            heroTag: "add_button",
             onPressed: () {
-              _unitPopupSheet(context, -1);
+              _unitPopupSheet(context, _units.length);
             },
             child: const Icon(Icons.add),
           ),
         ],
       ),
-      body: Column(children: [
-        Center(
-            child: ElevatedButton(
-          child: const Text("test popup"),
-          onPressed: () {
-            _unitPopupSheet(context, 0);
-          },
-        )),
-      ]),
+      body: Stack(
+        children: [
+          InteractiveViewer(
+            maxScale: 8,
+            minScale: 0.25,
+            scaleEnabled: true,
+            boundaryMargin: const EdgeInsets.all(double.infinity),
+            constrained: false,
+            child: Stack(
+              children: floatingDoodads,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   void _unitPopupSheet(BuildContext context, int id) {
+    UnitData? unit;
+
+    if (id > 0 && id < _units.length) {
+      unit = _units.elementAt(id);
+    }
+
     showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        builder: (BuildContext ctx) {
-          return DraggableScrollableSheet(
-            expand: false,
-            maxChildSize: 0.7,
-            builder: (context, scrollController) {
-              return SingleChildScrollView(
-                padding: EdgeInsets.all(4),
-                child: MonsterEditor(
-                  monsterId: id,
-                ),
-                // child: Column(
-                //   children: [
-                //     Row(
-                //       children: [Text("data")],
-                //     )
-                //   ],
-                // ),
-                controller: scrollController,
-              );
-            },
-          );
-        });
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext ctx) {
+        return DraggableScrollableSheet(
+          expand: false,
+          maxChildSize: 0.7,
+          builder: (context, scrollController) {
+            return SingleChildScrollView(
+              padding: const EdgeInsets.all(4),
+              controller: scrollController,
+              child: UnitViewerAndEditor(
+                unitData: unit,
+                onEdit: (newUnit) {
+                  setState(() {
+                    if (_units.length < id) {
+                      _units[id] = newUnit;
+                    } else {
+                      _units.add(newUnit);
+                    }
+                  });
+                },
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
+class UnitViewerAndEditor extends StatefulWidget {
+  final UnitData? unitData;
+  final Function(UnitData) onEdit;
+
+  UnitViewerAndEditor(
+      {super.key, required this.unitData, required this.onEdit});
+
+  @override
+  State<StatefulWidget> createState() => _UnitViewerAndEditorState();
+}
+
+class _UnitViewerAndEditorState extends State<UnitViewerAndEditor> {
+  bool _isEditing = false;
+
+  @override
+  Widget build(BuildContext context) {
+    if (_isEditing || widget.unitData == null) {
+      return UnitEditor(unitData: widget.unitData, onEdit: widget.onEdit);
+    } else {
+      return UnitDisplay(
+        unitData: widget.unitData!,
+        startEditing: () {
+          setState(() {
+            _isEditing = true;
+          });
+        },
+      );
+    }
   }
 }

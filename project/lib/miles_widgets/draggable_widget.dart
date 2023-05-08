@@ -1,333 +1,43 @@
-library draggable_widget;
-
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 class DraggableWidget extends StatefulWidget {
-  /// The widget that will be displayed as dragging widget
   final Widget child;
+  final Offset initialOffset;
 
-  /// The horizontal padding around the widget
-  final double horizontalSpace;
+  DraggableWidget(
+      {super.key, required this.child, required this.initialOffset});
 
-  /// The vertical padding around the widget
-  final double verticalSpace;
-
-  /// Intially should the widget be visible or not, default to [true]
-  final bool intialVisibility;
-
-  /// The top bottom pargin to create the bottom boundary for the widget, for example if you have a [BottomNavigationBar],
-  /// then you may need to set the bottom boundary so that the draggable button can't get on top of the [BottomNavigationBar]
-  final double bottomMargin;
-
-  /// The top bottom pargin to create the top boundary for the widget, for example if you have a [AppBar],
-  /// then you may need to set the bottom boundary so that the draggable button can't get on top of the [AppBar]
-  final double topMargin;
-
-  /// Status bar's height, default to 24
-  final double statusBarHeight;
-
-  /// Shadow's border radius for the draggable widget, default to 10
-  final double shadowBorderRadius;
-
-  /// A drag controller to show/hide or move the widget around the screen
-  final DragController? dragController;
-
-  /// [BoxShadow] when the widget is not being dragged, default to
-  /// ```Dart
-  ///const BoxShadow(
-  ///     color: Colors.black38,
-  ///    offset: Offset(0, 4),
-  ///    blurRadius: 2,
-  ///  ),
-  /// ```
-
-  final BoxShadow normalShadow;
-
-  /// [BoxShadow] when the widget is being dragged
-  ///```Dart
-  ///const BoxShadow(
-  ///     color: Colors.black38,
-  ///    offset: Offset(0, 10),
-  ///    blurRadius: 10,
-  ///  ),
-  /// ```
-  final BoxShadow draggingShadow;
-
-  /// How much should the [DraggableWidget] be scaled when it is being dragged, default to 1.1
-  final double dragAnimationScale;
-
-  /// Touch Delay Duration. Default value is zero. When set, drag operations will trigger after the duration.
-  final Duration touchDelay;
-
-  DraggableWidget({
-    Key? key,
-    required this.child,
-    this.horizontalSpace = 0,
-    this.verticalSpace = 0,
-    this.intialVisibility = true,
-    this.bottomMargin = 0,
-    this.topMargin = 0,
-    this.statusBarHeight = 24,
-    this.shadowBorderRadius = 10,
-    this.dragController,
-    this.dragAnimationScale = 1.1,
-    this.touchDelay = Duration.zero,
-    this.normalShadow = const BoxShadow(
-      color: Colors.black38,
-      blurRadius: 2,
-    ),
-    this.draggingShadow = const BoxShadow(
-      color: Colors.black38,
-      offset: Offset(0, 10),
-      blurRadius: 10,
-    ),
-  })  : assert(statusBarHeight >= 0),
-        assert(horizontalSpace >= 0),
-        assert(verticalSpace >= 0),
-        assert(bottomMargin >= 0),
-        super(key: key);
   @override
-  _DraggableWidgetState createState() => _DraggableWidgetState();
+  State<StatefulWidget> createState() => _DraggableWidgetState();
 }
 
-class _DraggableWidgetState extends State<DraggableWidget>
-    with SingleTickerProviderStateMixin {
-  double top = 0, left = 0;
-  double boundary = 0;
-  late AnimationController animationController;
-  late Animation animation;
-  double hardLeft = 0, hardTop = 0;
-  bool offstage = true;
-
-  double widgetHeight = 18;
-  double widgetWidth = 50;
-
-  final key = GlobalKey();
-
-  bool dragging = false;
-
-  bool? visible;
-
-  bool get currentVisibilty => visible ?? widget.intialVisibility;
-
-  bool isStillTouching = false;
+class _DraggableWidgetState extends State<DraggableWidget> {
+  late Offset _offset;
 
   @override
   void initState() {
-    hardTop = widget.topMargin;
-    animationController = AnimationController(
-      value: 1,
-      vsync: this,
-      duration: const Duration(milliseconds: 150),
-    )..addStatusListener(
-        (status) {
-          if (status == AnimationStatus.completed) {
-            hardLeft = left;
-            hardTop = top;
-          }
-        },
-      );
-
-    animation = Tween<double>(
-      begin: 0,
-      end: 1,
-    ).animate(CurvedAnimation(
-      parent: animationController,
-      curve: Curves.easeInOut,
-    ));
-
-    widget.dragController?._addState(this);
-
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      final widgetSize = getWidgetSize(key);
-      if (widgetSize != null) {
-        setState(() {
-          widgetHeight = widgetSize.height;
-          widgetWidth = widgetSize.width;
-        });
-      }
-
-      await Future.delayed(const Duration(
-        milliseconds: 100,
-      ));
-      setState(() {
-        offstage = false;
-        boundary = MediaQuery.of(context).size.height - widget.bottomMargin;
-        top = widget.topMargin;
-        left = 0;
-      });
-    });
-
     super.initState();
+    _offset = widget.initialOffset;
   }
 
-  @override
-  void dispose() {
-    animationController.dispose();
-    super.dispose();
-  }
+  void _updatePosition(DragUpdateDetails pointerMoveEvent) {
+    double x = _offset.dx + pointerMoveEvent.delta.dx;
+    double y = _offset.dy + pointerMoveEvent.delta.dy;
 
-  @override
-  void didUpdateWidget(DraggableWidget oldWidget) {
-    if (offstage == false) {
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        final widgetSize = getWidgetSize(key);
-        if (widgetSize != null) {
-          setState(() {
-            widgetHeight = widgetSize.height;
-            widgetWidth = widgetSize.width;
-          });
-        }
-        setState(() {
-          boundary = MediaQuery.of(context).size.height - widget.bottomMargin;
-        });
-      });
-    }
-    super.didUpdateWidget(oldWidget);
+    setState(() {
+      _offset = Offset(x, y);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: top,
-      left: left,
-      child: AnimatedSwitcher(
-        duration: Duration(
-          milliseconds: 150,
-        ),
-        transitionBuilder: (child, animation) {
-          return ScaleTransition(
-            scale: animation,
-            child: child,
-          );
-        },
-        child: !currentVisibilty
-            ? Container()
-            : Listener(
-                onPointerUp: (v) {
-                  if (!isStillTouching) {
-                    return;
-                  }
-                  isStillTouching = false;
-
-                  final p = v.position;
-                  setState(() {
-                    dragging = false;
-                  });
-                  if (animationController.isAnimating) {
-                    animationController.stop();
-                  }
-                  animationController.reset();
-                  animationController.forward();
-                },
-                onPointerDown: (v) async {
-                  isStillTouching = false;
-                  await Future.delayed(widget.touchDelay);
-                  isStillTouching = true;
-                },
-                onPointerMove: (v) async {
-                  if (!isStillTouching) {
-                    return;
-                  }
-                  if (animationController.isAnimating) {
-                    animationController.stop();
-                    animationController.reset();
-                  }
-
-                  setState(() {
-                    dragging = true;
-                    if (v.position.dy < boundary &&
-                        v.position.dy > widget.topMargin) {
-                      top = max(v.position.dy - (widgetHeight) / 2, 0);
-                    }
-
-                    left = max(v.position.dx - (widgetWidth) / 2, 0);
-
-                    hardLeft = left;
-                    hardTop = top;
-                  });
-                },
-                child: Offstage(
-                  offstage: offstage,
-                  child: Container(
-                    key: key,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: widget.horizontalSpace,
-                      vertical: widget.verticalSpace,
-                    ),
-                    child: AnimatedContainer(
-                        duration: Duration(milliseconds: 150),
-                        decoration: BoxDecoration(
-                          borderRadius:
-                              BorderRadius.circular(widget.shadowBorderRadius),
-                          boxShadow: [
-                            dragging
-                                ? widget.draggingShadow
-                                : widget.normalShadow
-                            // BoxShadow(
-                            //   color: Colors.black38,
-                            //   offset: dragging ? Offset(0, 10) : Offset(0, 4),
-                            //   blurRadius: dragging ? 10 : 2,
-                            // )
-                          ],
-                        ),
-                        child: Transform.scale(
-                            scale: dragging ? widget.dragAnimationScale : 1,
-                            child: widget.child)),
-                  ),
-                ),
-              ),
+      top: _offset.dy,
+      left: _offset.dx,
+      child: GestureDetector(
+        onPanUpdate: _updatePosition,
+        child: widget.child,
       ),
     );
-  }
-
-  Size? getWidgetSize(GlobalKey key) {
-    final keyContext = key.currentContext;
-    if (keyContext != null) {
-      final box = keyContext.findRenderObject() as RenderBox;
-      return box.size;
-    } else {
-      return null;
-    }
-  }
-
-  void _showWidget() {
-    setState(() {
-      visible = true;
-    });
-  }
-
-  void _hideWidget() {
-    setState(() {
-      visible = false;
-    });
-  }
-
-  Offset _getCurrentPosition() {
-    return Offset(left, top);
-  }
-}
-
-class DragController {
-  _DraggableWidgetState? _widgetState;
-  void _addState(_DraggableWidgetState _widgetState) {
-    this._widgetState = _widgetState;
-  }
-
-  /// Get the current screen [Offset] of the widget
-  Offset? getCurrentPosition() {
-    return _widgetState?._getCurrentPosition();
-  }
-
-  /// Makes the widget visible
-  void showWidget() {
-    _widgetState?._showWidget();
-  }
-
-  /// Hide the widget
-  void hideWidget() {
-    _widgetState?._hideWidget();
   }
 }

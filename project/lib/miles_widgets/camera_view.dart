@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:path_provider/path_provider.dart';
 
 late List<CameraDescription> _cameras;
 
@@ -18,7 +19,6 @@ class CameraView extends StatefulWidget {
 
 class _CameraViewState extends State<CameraView> {
   late CameraController controller;
-  String? savedImageFile;
 
   @override
   void initState() {
@@ -56,35 +56,49 @@ class _CameraViewState extends State<CameraView> {
     }
 
     return Scaffold(
-        body: Column(children: [
-      Expanded(
-          child: Container(
-              width: double.infinity,
-              height: double.infinity,
-              child: CameraPreview(controller))),
-      Row(mainAxisSize: MainAxisSize.max, children: [
+      body: Column(children: [
         Expanded(
+          child: Container(
+            width: double.infinity,
+            height: double.infinity,
+            child: CameraPreview(controller),
+          ),
+        ),
+        Row(mainAxisSize: MainAxisSize.max, children: [
+          Expanded(
             child: Container(
-          height: 256.0,
-          decoration: const BoxDecoration(color: Colors.black),
-          child: Align(
-              alignment: Alignment.center,
-              child: ElevatedButton(
+              height: 256.0,
+              decoration: const BoxDecoration(color: Colors.black),
+              child: Align(
+                alignment: Alignment.center,
+                child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: Colors.black,
-                      padding: const EdgeInsets.all(24.0),
-                      shape: const CircleBorder()),
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.black,
+                    padding: const EdgeInsets.all(24.0),
+                    shape: const CircleBorder(),
+                  ),
                   onPressed: () async {
                     var pic = await controller.takePicture();
 
-                    setState(() {
-                      savedImageFile = pic.path;
-                    });
+                    String path =
+                        (await getApplicationDocumentsDirectory()).path;
+
+                    var file = File("$path/image.png");
+                    await pic.saveTo("$path/image.png");
+
+                    imageCache.clear();
+                    imageCache.clearLiveImages();
+
+                    Navigator.of(context).pop();
                   },
-                  child: const Icon(Icons.camera))),
-        ))
+                  child: const Icon(Icons.camera),
+                ),
+              ),
+            ),
+          )
+        ]),
       ]),
-    ]));
+    );
   }
 }
