@@ -63,11 +63,13 @@ class UnitMarker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(shape: CircleBorder()),
-      onPressed: () => onPress,
-      onLongPress: () => selected,
-      child: Text(name),
-    );
+    return DraggableWidget(
+        initialOffset: const Offset(0, 0),
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(shape: CircleBorder()),
+          onPressed: () => onPress(),
+          onLongPress: () => onSelect(),
+          child: Text(name),
+        ));
   }
 }

@@ -51,18 +51,15 @@ class _MilesWidgetState extends ConsumerState<MilesWidget> {
     List<Widget> floatingDoodads = _units.asMap().entries.map<Widget>((entry) {
       var idx = entry.key;
 
-      return DraggableWidget(
-        initialOffset: const Offset(0, 0),
-        child: UnitMarker(
-          name: entry.value.name,
-          selected: false,
-          onSelect: () {
-            _unitPopupSheet(context, -1);
-          },
-          onPress: () {
-            _unitPopupSheet(context, -1);
-          },
-        ),
+      return UnitMarker(
+        name: entry.value.name,
+        selected: false,
+        onSelect: () {
+          _unitPopupSheet(context, idx);
+        },
+        onPress: () {
+          _unitPopupSheet(context, idx);
+        },
       );
     }).toList();
 
@@ -129,7 +126,7 @@ class _MilesWidgetState extends ConsumerState<MilesWidget> {
   void _unitPopupSheet(BuildContext context, int id) {
     UnitData? unit;
 
-    if (id > 0 && id < _units.length) {
+    if (id >= 0 && id < _units.length) {
       unit = _units.elementAt(id);
     }
 
@@ -148,8 +145,9 @@ class _MilesWidgetState extends ConsumerState<MilesWidget> {
                 unitData: unit,
                 onEdit: (newUnit) {
                   setState(() {
-                    if (_units.length < id) {
+                    if (id < _units.length) {
                       _units[id] = newUnit;
+                      _units.length;
                     } else {
                       _units.add(newUnit);
                     }
@@ -168,7 +166,7 @@ class UnitViewerAndEditor extends StatefulWidget {
   final UnitData? unitData;
   final Function(UnitData) onEdit;
 
-  UnitViewerAndEditor(
+  const UnitViewerAndEditor(
       {super.key, required this.unitData, required this.onEdit});
 
   @override

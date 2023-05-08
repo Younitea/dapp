@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'unit_marker.dart';
@@ -15,6 +16,7 @@ class UnitEditor extends ConsumerStatefulWidget {
 }
 
 class _UnitEditorState extends ConsumerState<UnitEditor> {
+  final _nameController = TextEditingController();
   final _strController = TextEditingController();
   final _dexController = TextEditingController();
   final _conController = TextEditingController();
@@ -22,7 +24,6 @@ class _UnitEditorState extends ConsumerState<UnitEditor> {
   final _wisController = TextEditingController();
   final _chaController = TextEditingController();
 
-  final _formKey = GlobalKey<FormState>();
   late UnitData _unit;
 
   static const RESISTANCES = [
@@ -46,7 +47,7 @@ class _UnitEditorState extends ConsumerState<UnitEditor> {
     super.initState();
     _unit = widget.unitData ??
         UnitData(
-            name: "0",
+            name: "",
             hp: 100,
             str: 0,
             dex: 0,
@@ -56,6 +57,7 @@ class _UnitEditorState extends ConsumerState<UnitEditor> {
             cha: 0,
             resistances: 0);
 
+    _nameController.text = _unit.name.toString();
     _strController.text = _unit.str.toString();
     _dexController.text = _unit.dex.toString();
     _conController.text = _unit.con.toString();
@@ -67,6 +69,7 @@ class _UnitEditorState extends ConsumerState<UnitEditor> {
   @override
   void dispose() {
     super.dispose();
+    _nameController.dispose();
     _strController.dispose();
     _dexController.dispose();
     _conController.dispose();
@@ -101,19 +104,13 @@ class _UnitEditorState extends ConsumerState<UnitEditor> {
               ),
             ]),
             const SizedBox(height: 10),
-            TextFormField(
-              initialValue: widget.unitData?.name,
+            TextField(
+              controller: _nameController,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: "Name",
               ),
               // The validator receives the text that the user has entered.
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter a valid name';
-                }
-                return null;
-              },
             ),
             const SizedBox(height: 32),
             Row(
@@ -191,6 +188,7 @@ class _UnitEditorState extends ConsumerState<UnitEditor> {
               children: [
                 ElevatedButton(
                   onPressed: () {
+                    _unit.name = _nameController.text;
                     _unit.str = int.parse(_strController.text);
                     _unit.dex = int.parse(_dexController.text);
                     _unit.con = int.parse(_conController.text);
