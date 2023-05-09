@@ -81,7 +81,6 @@ class AidansWidget extends ConsumerWidget {
           ),
           const DeathSaveRoller(),
           const SizedBox(height: 20),
-          const InitiativeRoller(),
           SizedBox(
             width: 250,
             height: 25,
@@ -153,6 +152,7 @@ class AidansWidget extends ConsumerWidget {
             ),
           ),
           const SavingThrower(),
+          const InitiativeRoller(),
           SavedAttack(savedAttackOneProvider),
           SavedAttack(savedAttackTwoProvider),
           SavedAttack(savedAttackThreeProvider),

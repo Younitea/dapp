@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import '../shared/roll_skill.dart';
 import '../shared/providers.dart';
+import 'dice_parser.dart';
 
 class InitiativeRoller extends ConsumerStatefulWidget {
   const InitiativeRoller({super.key});
@@ -13,6 +14,7 @@ class InitiativeRoller extends ConsumerStatefulWidget {
 class _InitiativeRollerState extends ConsumerState<InitiativeRoller> {
   String? _dropDownValue;
   String? _bonusValue;
+  final TextEditingController _controller = TextEditingController();
   @override
   Widget build(BuildContext context) => ElevatedButton(
       onPressed: () => showDialog(
@@ -36,10 +38,19 @@ class _InitiativeRollerState extends ConsumerState<InitiativeRoller> {
                           SizedBox(
                             width: 75,
                             child: TextField(
-                              textAlign: TextAlign.center,
-                              onSubmitted: (value) =>
-                                  _bonusValue = value != "" ? value : null,
-                            ),
+                                textAlign: TextAlign.center,
+                                controller: _controller,
+                                onSubmitted: (value) {
+                                  String? newVal = _bonusValue;
+                                  if (value == "") {
+                                    newVal = null;
+                                  } else if (diceParser.hasMatch(value)) {
+                                    newVal = value;
+                                  } else {
+                                    _controller.clear();
+                                  }
+                                  _bonusValue = newVal;
+                                }),
                           ),
                         ],
                       ),
