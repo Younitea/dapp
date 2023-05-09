@@ -12,104 +12,150 @@ import 'saving_thrower.dart';
 class AidansWidget extends ConsumerWidget {
   const AidansWidget({super.key});
   @override
-  Widget build(BuildContext context, WidgetRef ref) => Column(children: [
-        EditableAttribute<String>(
-          provider: nameProvider,
-          maxLen: 24,
-          width: 500,
-          fontSize: 32,
-          alignment: TextAlign.center,
-        ),
-        EditableAttribute<int>(
-          provider: levelProvider,
-          maxLen: 2,
-          width: 50,
-          attributeLabel: "LVL: ",
-        ),
-        const SizedBox(height: 20),
-        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-            EditableAttribute<int>(
-              provider: maxHealthProvider,
-              maxLen: 3,
-              width: 105,
-              fontSize: 18,
-              attributeLabel: "Max HP: ",
+  Widget build(BuildContext context, WidgetRef ref) => Column(
+        children: [
+          Container(
+            height: 65,
+            //decoration: const BoxDecoration(color: Color.fromARGB(255, 235, 235, 235)),
+            child: Column(
+              children: [
+                IntrinsicHeight(
+                  child: EditableAttribute<String>(
+                    provider: nameProvider,
+                    maxLen: 28,
+                    fontSize: 32,
+                    maxLines: 2,
+                    alignment: TextAlign.center,
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                  width: 225,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      IntrinsicWidth(
+                        child: EditableAttribute<int>(
+                          provider: levelProvider,
+                          maxLen: 2,
+                          attributeLabel: "LVL: ",
+                        ),
+                      ),
+                      const VerticalDivider(color: Colors.grey),
+                      IntrinsicWidth(
+                        child: EditableAttribute<int>(
+                          provider: maxHealthProvider,
+                          maxLen: 3,
+                          attributeLabel: "Max HP: ",
+                        ),
+                      ),
+                      const VerticalDivider(color: Colors.grey),
+                      IntrinsicWidth(
+                        child: EditableAttribute<int>(
+                          provider: armorClassProvider,
+                          maxLen: 2,
+                          attributeLabel: "AC: ",
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            AttributeDisplay(
-              provider: curHealthProvider,
-              width: 130,
-              fontSize: 18,
-              attributeLabel: "Current HP: ",
+          ),
+          const SizedBox(height: 15),
+          SizedBox(
+            width: 300,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                const HealthModifier("Damage", Colors.red, true),
+                AttributeDisplay(
+                  fontSize: 20,
+                  provider: curHealthProvider,
+                  attributeLabel: "HP: ",
+                ),
+                const HealthModifier("Heal", Colors.green, false),
+              ],
             ),
-          ]),
-          const SizedBox(width: 5),
-          const HealthModifier("Damage", Colors.red, true),
-          const SizedBox(width: 5),
-          const HealthModifier("Heal", Colors.green, false),
-        ]),
-        const DeathSaveRoller(),
-        const SizedBox(height: 20),
-        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          ),
+          const DeathSaveRoller(),
+          const SizedBox(height: 20),
           const InitiativeRoller(),
-          const SizedBox(width: 10),
-          EditableAttribute<int>(
-            provider: armorClassProvider,
-            maxLen: 2,
-            width: 75,
-            fontSize: 20,
-            attributeLabel: "AC: ",
+          SizedBox(
+            width: 250,
+            height: 25,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                IntrinsicWidth(
+                  child: EditableAttribute<int>(
+                    provider: strengthProvider,
+                    maxLen: 2,
+                    fontSize: 20,
+                    attributeLabel: "STR: ",
+                  ),
+                ),
+                const VerticalDivider(color: Colors.grey),
+                IntrinsicWidth(
+                  child: EditableAttribute<int>(
+                    provider: dexterityProvider,
+                    maxLen: 2,
+                    fontSize: 20,
+                    attributeLabel: "DEX: ",
+                  ),
+                ),
+                const VerticalDivider(color: Colors.grey),
+                IntrinsicWidth(
+                  child: EditableAttribute<int>(
+                    provider: constitutionProvider,
+                    maxLen: 2,
+                    fontSize: 20,
+                    attributeLabel: "CON: ",
+                  ),
+                ),
+              ],
+            ),
           ),
-        ]),
-        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          EditableAttribute<int>(
-            provider: strengthProvider,
-            maxLen: 2,
-            width: 75,
-            fontSize: 20,
-            attributeLabel: "STR: ",
+          SizedBox(
+            width: 250,
+            height: 25,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                IntrinsicWidth(
+                  child: EditableAttribute<int>(
+                    provider: intelligenceProvider,
+                    maxLen: 2,
+                    fontSize: 20,
+                    attributeLabel: "INT: ",
+                  ),
+                ),
+                const VerticalDivider(color: Colors.grey),
+                IntrinsicWidth(
+                  child: EditableAttribute<int>(
+                    provider: wisdomProvider,
+                    maxLen: 2,
+                    fontSize: 20,
+                    attributeLabel: "WIS: ",
+                  ),
+                ),
+                const VerticalDivider(color: Colors.grey),
+                IntrinsicWidth(
+                  child: EditableAttribute<int>(
+                    provider: charismaProvider,
+                    maxLen: 2,
+                    fontSize: 20,
+                    attributeLabel: "CHA: ",
+                  ),
+                ),
+              ],
+            ),
           ),
-          EditableAttribute<int>(
-            provider: dexterityProvider,
-            maxLen: 2,
-            width: 75,
-            fontSize: 20,
-            attributeLabel: "DEX: ",
-          ),
-          EditableAttribute<int>(
-            provider: constitutionProvider,
-            maxLen: 2,
-            width: 75,
-            fontSize: 20,
-            attributeLabel: "CON: ",
-          ),
-        ]),
-        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          EditableAttribute<int>(
-            provider: intelligenceProvider,
-            maxLen: 2,
-            width: 75,
-            fontSize: 20,
-            attributeLabel: "INT: ",
-          ),
-          EditableAttribute<int>(
-            provider: wisdomProvider,
-            maxLen: 2,
-            width: 75,
-            fontSize: 20,
-            attributeLabel: "WIS: ",
-          ),
-          EditableAttribute<int>(
-            provider: charismaProvider,
-            maxLen: 2,
-            width: 75,
-            fontSize: 20,
-            attributeLabel: "CHA: ",
-          ),
-        ]),
-        const SavingThrower(),
-        SavedAttack(savedAttackOneProvider),
-        SavedAttack(savedAttackTwoProvider),
-        SavedAttack(savedAttackThreeProvider),
-      ]);
+          const SavingThrower(),
+          SavedAttack(savedAttackOneProvider),
+          SavedAttack(savedAttackTwoProvider),
+          SavedAttack(savedAttackThreeProvider),
+        ],
+      );
 }

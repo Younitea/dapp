@@ -13,6 +13,7 @@ class HealthModifier extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) => ElevatedButton(
       style: ElevatedButton.styleFrom(
         backgroundColor: _buttonColor,
+        fixedSize: const Size.fromWidth(90),
       ),
       onPressed: () => showDialog(
             context: context,
