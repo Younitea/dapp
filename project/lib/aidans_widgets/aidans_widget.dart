@@ -8,151 +8,175 @@ import 'health_modifier.dart';
 import 'deathsave_roller.dart';
 import 'saved_attack.dart';
 import 'saving_thrower.dart';
+import 'editable_name.dart';
 
 class AidansWidget extends ConsumerWidget {
   const AidansWidget({super.key});
   @override
-  Widget build(BuildContext context, WidgetRef ref) => Column(
-        children: [
-          Column(
-            children: [
-              IntrinsicHeight(
-                child: EditableAttribute<String>(
-                  provider: nameProvider,
-                  maxLen: 28,
-                  fontSize: 32,
-                  maxLines: 2,
-                  alignment: TextAlign.center,
-                ),
-              ),
-              SizedBox(
-                height: 20,
-                width: 225,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    IntrinsicWidth(
-                      child: EditableAttribute<int>(
-                        provider: levelProvider,
-                        maxLen: 2,
-                        attributeLabel: "LVL: ",
-                      ),
+  Widget build(BuildContext context, WidgetRef ref) => Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          children: [
+            Column(
+              children: [
+                const EditableName(28, 32),
+                const SizedBox(height: 10),
+                Row(
+                  children: const [
+                    Text(
+                      "Stats",
+                      style: TextStyle(fontSize: 20),
                     ),
-                    const VerticalDivider(color: Colors.grey),
-                    IntrinsicWidth(
-                      child: EditableAttribute<int>(
-                        provider: maxHealthProvider,
-                        maxLen: 3,
-                        attributeLabel: "Max HP: ",
-                      ),
-                    ),
-                    const VerticalDivider(color: Colors.grey),
-                    IntrinsicWidth(
-                      child: EditableAttribute<int>(
-                        provider: armorClassProvider,
-                        maxLen: 2,
-                        attributeLabel: "AC: ",
-                      ),
-                    ),
+                    SizedBox(width: 12),
+                    Expanded(child: Divider(thickness: 1)),
                   ],
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          SizedBox(
-            width: 300,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                const HealthModifier("Damage", Colors.red, true),
-                AttributeDisplay(
-                  fontSize: 20,
-                  provider: curHealthProvider,
-                  attributeLabel: "HP: ",
+                const SizedBox(height: 10),
+                SizedBox(
+                  height: 30,
+                  width: 300,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      EditableAttribute(
+                        provider: levelProvider,
+                        maxLen: 2,
+                        width: 70,
+                        attributeLabel: "LVL",
+                      ),
+                      EditableAttribute(
+                        provider: maxHealthProvider,
+                        maxLen: 3,
+                        width: 70,
+                        attributeLabel: "Max HP",
+                      ),
+                      EditableAttribute(
+                        provider: armorClassProvider,
+                        maxLen: 2,
+                        width: 70,
+                        attributeLabel: "AC",
+                      ),
+                    ],
+                  ),
                 ),
-                const HealthModifier("Heal", Colors.green, false),
               ],
             ),
-          ),
-          const DeathSaveRoller(),
-          const SizedBox(height: 20),
-          SizedBox(
-            width: 250,
-            height: 25,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                IntrinsicWidth(
-                  child: EditableAttribute<int>(
+            const SizedBox(height: 10),
+            SizedBox(
+              width: 300,
+              height: 30,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  EditableAttribute(
                     provider: strengthProvider,
                     maxLen: 2,
-                    fontSize: 20,
-                    attributeLabel: "STR: ",
+                    width: 70,
+                    fontSize: 16,
+                    attributeLabel: "STR",
                   ),
-                ),
-                const VerticalDivider(color: Colors.grey),
-                IntrinsicWidth(
-                  child: EditableAttribute<int>(
+                  EditableAttribute(
                     provider: dexterityProvider,
                     maxLen: 2,
-                    fontSize: 20,
-                    attributeLabel: "DEX: ",
+                    width: 70,
+                    fontSize: 16,
+                    attributeLabel: "DEX",
                   ),
-                ),
-                const VerticalDivider(color: Colors.grey),
-                IntrinsicWidth(
-                  child: EditableAttribute<int>(
+                  EditableAttribute(
                     provider: constitutionProvider,
                     maxLen: 2,
-                    fontSize: 20,
-                    attributeLabel: "CON: ",
+                    width: 70,
+                    fontSize: 16,
+                    attributeLabel: "CON",
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          SizedBox(
-            width: 250,
-            height: 25,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                IntrinsicWidth(
-                  child: EditableAttribute<int>(
+            const SizedBox(height: 10),
+            SizedBox(
+              width: 300,
+              height: 30,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  EditableAttribute(
                     provider: intelligenceProvider,
                     maxLen: 2,
-                    fontSize: 20,
-                    attributeLabel: "INT: ",
+                    width: 70,
+                    fontSize: 16,
+                    attributeLabel: "INT",
                   ),
-                ),
-                const VerticalDivider(color: Colors.grey),
-                IntrinsicWidth(
-                  child: EditableAttribute<int>(
+                  EditableAttribute(
                     provider: wisdomProvider,
                     maxLen: 2,
-                    fontSize: 20,
-                    attributeLabel: "WIS: ",
+                    width: 70,
+                    fontSize: 16,
+                    attributeLabel: "WIS",
                   ),
-                ),
-                const VerticalDivider(color: Colors.grey),
-                IntrinsicWidth(
-                  child: EditableAttribute<int>(
+                  EditableAttribute(
                     provider: charismaProvider,
                     maxLen: 2,
-                    fontSize: 20,
-                    attributeLabel: "CHA: ",
+                    width: 70,
+                    fontSize: 16,
+                    attributeLabel: "CHA",
                   ),
-                ),
+                ],
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                InitiativeRoller(),
+                SizedBox(width: 10),
+                SavingThrower()
               ],
             ),
-          ),
-          const SavingThrower(),
-          const InitiativeRoller(),
-          const SizedBox(height: 20),
-          SavedAttack(savedAttackOneProvider),
-          SavedAttack(savedAttackTwoProvider),
-          SavedAttack(savedAttackThreeProvider),
-        ],
+            const SizedBox(height: 20),
+            Row(
+              children: const [
+                Text(
+                  "Health/Damage",
+                  style: TextStyle(fontSize: 20),
+                ),
+                SizedBox(width: 12),
+                Expanded(child: Divider(thickness: 1)),
+              ],
+            ),
+            const SizedBox(height: 10),
+            SizedBox(
+              width: 300,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  const HealthModifier("Damage", Colors.red, true),
+                  AttributeDisplay(
+                    fontSize: 16,
+                    width: 60,
+                    height: 35,
+                    provider: curHealthProvider,
+                    attributeLabel: "HP",
+                  ),
+                  const HealthModifier("Heal", Colors.green, false),
+                ],
+              ),
+            ),
+            const DeathSaveRoller(),
+            const SizedBox(height: 20),
+            Row(
+              children: const [
+                Text(
+                  "Saved Attacks",
+                  style: TextStyle(fontSize: 20),
+                ),
+                SizedBox(width: 12),
+                Expanded(child: Divider(thickness: 1)),
+              ],
+            ),
+            const SizedBox(height: 5),
+            SavedAttack(savedAttackOneProvider),
+            SavedAttack(savedAttackTwoProvider),
+            SavedAttack(savedAttackThreeProvider),
+          ],
+        ),
       );
 }

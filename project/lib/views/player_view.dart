@@ -14,8 +14,6 @@ class PlayerView extends ConsumerWidget {
         body: Center(
           child: SingleChildScrollView(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: const [
                 AidansWidget(),
                 ThomasWidget(),
