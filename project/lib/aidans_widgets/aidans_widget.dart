@@ -14,56 +14,52 @@ class AidansWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) => Column(
         children: [
-          Container(
-            height: 65,
-            //decoration: const BoxDecoration(color: Color.fromARGB(255, 235, 235, 235)),
-            child: Column(
-              children: [
-                IntrinsicHeight(
-                  child: EditableAttribute<String>(
-                    provider: nameProvider,
-                    maxLen: 28,
-                    fontSize: 32,
-                    maxLines: 2,
-                    alignment: TextAlign.center,
-                  ),
+          Column(
+            children: [
+              IntrinsicHeight(
+                child: EditableAttribute<String>(
+                  provider: nameProvider,
+                  maxLen: 28,
+                  fontSize: 32,
+                  maxLines: 2,
+                  alignment: TextAlign.center,
                 ),
-                SizedBox(
-                  height: 20,
-                  width: 225,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      IntrinsicWidth(
-                        child: EditableAttribute<int>(
-                          provider: levelProvider,
-                          maxLen: 2,
-                          attributeLabel: "LVL: ",
-                        ),
+              ),
+              SizedBox(
+                height: 20,
+                width: 225,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    IntrinsicWidth(
+                      child: EditableAttribute<int>(
+                        provider: levelProvider,
+                        maxLen: 2,
+                        attributeLabel: "LVL: ",
                       ),
-                      const VerticalDivider(color: Colors.grey),
-                      IntrinsicWidth(
-                        child: EditableAttribute<int>(
-                          provider: maxHealthProvider,
-                          maxLen: 3,
-                          attributeLabel: "Max HP: ",
-                        ),
+                    ),
+                    const VerticalDivider(color: Colors.grey),
+                    IntrinsicWidth(
+                      child: EditableAttribute<int>(
+                        provider: maxHealthProvider,
+                        maxLen: 3,
+                        attributeLabel: "Max HP: ",
                       ),
-                      const VerticalDivider(color: Colors.grey),
-                      IntrinsicWidth(
-                        child: EditableAttribute<int>(
-                          provider: armorClassProvider,
-                          maxLen: 2,
-                          attributeLabel: "AC: ",
-                        ),
+                    ),
+                    const VerticalDivider(color: Colors.grey),
+                    IntrinsicWidth(
+                      child: EditableAttribute<int>(
+                        provider: armorClassProvider,
+                        maxLen: 2,
+                        attributeLabel: "AC: ",
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          const SizedBox(height: 15),
+          const SizedBox(height: 20),
           SizedBox(
             width: 300,
             child: Row(
@@ -153,6 +149,7 @@ class AidansWidget extends ConsumerWidget {
           ),
           const SavingThrower(),
           const InitiativeRoller(),
+          const SizedBox(height: 20),
           SavedAttack(savedAttackOneProvider),
           SavedAttack(savedAttackTwoProvider),
           SavedAttack(savedAttackThreeProvider),

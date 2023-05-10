@@ -11,7 +11,7 @@ class DeathSaveRoller extends ConsumerStatefulWidget {
 }
 
 class _DeathSaveState extends ConsumerState<DeathSaveRoller> {
-  Future<int> _result = Future(() => 0);
+  Future<int> _future = Future(() => 0);
   int _numSuccess = 0;
   int _numFails = 0;
 
@@ -39,8 +39,8 @@ class _DeathSaveState extends ConsumerState<DeathSaveRoller> {
           ),
           const SizedBox(height: 10),
           FutureBuilder(
-              future: _result,
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
+              future: _future,
+              builder: (context, snapshot) {
                 switch (snapshot.connectionState) {
                   case ConnectionState.waiting:
                     return const SizedBox(
@@ -58,9 +58,9 @@ class _DeathSaveState extends ConsumerState<DeathSaveRoller> {
                             });
                           } else {
                             setState(() {
-                              _result = rollSkill();
+                              _future = rollSkill();
                             });
-                            _result.then((value) {
+                            _future.then((value) {
                               if (value < 10) {
                                 setState(() => _numFails++);
                               } else {
