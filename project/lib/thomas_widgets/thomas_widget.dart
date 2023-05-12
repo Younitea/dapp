@@ -43,6 +43,7 @@ class ThomasWidget extends ConsumerWidget {
             },
             child: const Text("SR"),
           ),
+          const SizedBox(width: 10),
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: Colors.lightBlue),
             onPressed: () => {
@@ -72,10 +73,12 @@ class ThomasWidget extends ConsumerWidget {
                 {ref.read(hitDice.notifier).state = ref.read(hitDice) - 2},
             child: const Icon(Icons.exposure_minus_2_sharp),
           ),
+          const SizedBox(width: 10),
           Text(
             "d${ref.watch(hitDice.state).state}",
             style: const TextStyle(fontSize: 20),
           ),
+          const SizedBox(width: 10),
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: Colors.lightBlue),
             onPressed: () =>
@@ -105,6 +108,7 @@ class ThomasWidget extends ConsumerWidget {
                       await rollSkill(0, 'none', '1d4');
                 },
                 child: const Text("1d4")),
+            const SizedBox(width: 10),
             ElevatedButton(
                 style:
                     ElevatedButton.styleFrom(backgroundColor: Colors.lightBlue),
@@ -114,6 +118,7 @@ class ThomasWidget extends ConsumerWidget {
                       await rollSkill(0, 'none', '1d6');
                 },
                 child: const Text("1d6")),
+            const SizedBox(width: 10),
             ElevatedButton(
                 style:
                     ElevatedButton.styleFrom(backgroundColor: Colors.lightBlue),
@@ -137,6 +142,7 @@ class ThomasWidget extends ConsumerWidget {
                       await rollSkill(0, 'none', '1d10');
                 },
                 child: const Text("1d10")),
+            const SizedBox(width: 10),
             ElevatedButton(
                 style:
                     ElevatedButton.styleFrom(backgroundColor: Colors.lightBlue),
@@ -146,6 +152,7 @@ class ThomasWidget extends ConsumerWidget {
                       await rollSkill(0, 'none', '1d12');
                 },
                 child: const Text("1d12")),
+            const SizedBox(width: 10),
             ElevatedButton(
                 style:
                     ElevatedButton.styleFrom(backgroundColor: Colors.lightBlue),
