@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../shared/roll_skill.dart';
 import '../shared/providers.dart';
 import 'dice_parser.dart';
@@ -53,6 +54,10 @@ class _InitiativeRollerState extends ConsumerState<InitiativeRoller> {
                                       child: TextField(
                                           textAlign: TextAlign.center,
                                           controller: _controller,
+                                          inputFormatters: [
+                                            LengthLimitingTextInputFormatter(
+                                                16),
+                                          ],
                                           onSubmitted: (value) {
                                             String? newVal = _bonusValue;
                                             if (value == "") {
