@@ -10,191 +10,200 @@ class ThomasWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final skillList = ref.watch(skillProvider);
-    return SingleChildScrollView(
-        child: Column(
-      children: [
-        Row(
-          children: const [
-            Text(
-              "Resting",
-              style: TextStyle(fontSize: 20),
-            ),
-            SizedBox(width: 12),
-            Expanded(child: Divider(thickness: 1)),
-          ],
-        ),
-        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.lightBlue),
-            onPressed: () async {
-              if (ref.read(hitDiceCount) > 0) {
-                ref.read(curHealthProvider.notifier).state = await rollSkill(
-                        ((ref.read(constitutionProvider) - 10) ~/ 2),
-                        'none',
-                        " 1d${ref.read(hitDice)} ") +
-                    ref.read(curHealthProvider);
-                if (ref.read(curHealthProvider) > ref.read(maxHealthProvider)) {
-                  ref.read(curHealthProvider.notifier).state =
-                      ref.read(maxHealthProvider);
-                }
-                ref.read(hitDiceCount.notifier).state =
-                    ref.read(hitDiceCount) - 1;
-              }
-            },
-            child: const Text("SR"),
-          ),
-          const SizedBox(width: 10),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.lightBlue),
-            onPressed: () => {
-              ref.read(initiativeProvider.notifier).state = 0,
-              ref.read(curHealthProvider.notifier).state =
-                  ref.read(maxHealthProvider),
-              ref.read(hitDiceCount.notifier).state = ref.read(levelProvider)
-            },
-            child: const Text("LR"),
-          ),
-        ]),
-        Row(
-          children: const [
-            Text(
-              "Hit Dice",
-              style: TextStyle(fontSize: 20),
-            ),
-            SizedBox(width: 12),
-            Expanded(child: Divider(thickness: 1)),
-          ],
-        ),
-        Text("Hitdice Remaining: ${ref.watch(hitDiceCount.state).state}"),
-        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.lightBlue),
-            onPressed: () =>
-                {ref.read(hitDice.notifier).state = ref.read(hitDice) - 2},
-            child: const Icon(Icons.exposure_minus_2_sharp),
-          ),
-          const SizedBox(width: 10),
-          Text(
-            "d${ref.watch(hitDice.state).state}",
-            style: const TextStyle(fontSize: 20),
-          ),
-          const SizedBox(width: 10),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.lightBlue),
-            onPressed: () =>
-                {ref.read(hitDice.notifier).state = ref.read(hitDice) + 2},
-            child: const Icon(Icons.exposure_plus_2_sharp),
-          ),
-        ]),
-        Row(
-          children: const [
-            Text(
-              "Free Dice Roll",
-              style: TextStyle(fontSize: 20),
-            ),
-            SizedBox(width: 12),
-            Expanded(child: Divider(thickness: 1)),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+    return Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: SingleChildScrollView(
+            child: Column(
           children: [
-            ElevatedButton(
-                style:
-                    ElevatedButton.styleFrom(backgroundColor: Colors.lightBlue),
-                onPressed: () async {
-                  ref.read(skillRollProvider.notifier).state = -100;
-                  ref.read(skillRollProvider.notifier).state =
-                      await rollSkill(0, 'none', '1d4');
-                },
-                child: const Text("1d4")),
-            const SizedBox(width: 10),
-            ElevatedButton(
-                style:
-                    ElevatedButton.styleFrom(backgroundColor: Colors.lightBlue),
-                onPressed: () async {
-                  ref.read(skillRollProvider.notifier).state = -100;
-                  ref.read(skillRollProvider.notifier).state =
-                      await rollSkill(0, 'none', '1d6');
-                },
-                child: const Text("1d6")),
-            const SizedBox(width: 10),
-            ElevatedButton(
-                style:
-                    ElevatedButton.styleFrom(backgroundColor: Colors.lightBlue),
-                onPressed: () async {
-                  ref.read(skillRollProvider.notifier).state = -100;
-                  ref.read(skillRollProvider.notifier).state =
-                      await rollSkill(0, 'none', '1d8');
-                },
-                child: const Text("1d8")),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-                style:
-                    ElevatedButton.styleFrom(backgroundColor: Colors.lightBlue),
-                onPressed: () async {
-                  ref.read(skillRollProvider.notifier).state = -100;
-                  ref.read(skillRollProvider.notifier).state =
-                      await rollSkill(0, 'none', '1d10');
-                },
-                child: const Text("1d10")),
-            const SizedBox(width: 10),
-            ElevatedButton(
-                style:
-                    ElevatedButton.styleFrom(backgroundColor: Colors.lightBlue),
-                onPressed: () async {
-                  ref.read(skillRollProvider.notifier).state = -100;
-                  ref.read(skillRollProvider.notifier).state =
-                      await rollSkill(0, 'none', '1d12');
-                },
-                child: const Text("1d12")),
-            const SizedBox(width: 10),
-            ElevatedButton(
-                style:
-                    ElevatedButton.styleFrom(backgroundColor: Colors.lightBlue),
-                onPressed: () async {
-                  ref.read(skillRollProvider.notifier).state = -100;
-                  ref.read(skillRollProvider.notifier).state =
-                      await rollSkill(0, 'none', '1d20');
-                },
-                child: const Text("1d20")),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-                style: const TextStyle(
-                  fontSize: 20.0,
+            Row(
+              children: const [
+                Text(
+                  "Resting",
+                  style: TextStyle(fontSize: 20),
                 ),
-                (ref.watch(skillRollProvider) == -100)
-                    ? "Loading"
-                    : "Output: ${ref.watch(skillRollProvider.state).state}"),
-          ],
-        ),
-        Row(
-          children: const [
-            Text(
-              "Skills",
-              style: TextStyle(fontSize: 20),
+                SizedBox(width: 12),
+                Expanded(child: Divider(thickness: 1)),
+              ],
             ),
-            SizedBox(width: 12),
-            Expanded(child: Divider(thickness: 1)),
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              ElevatedButton(
+                style:
+                    ElevatedButton.styleFrom(backgroundColor: Colors.lightBlue),
+                onPressed: () async {
+                  if (ref.read(hitDiceCount) > 0) {
+                    ref.read(curHealthProvider.notifier).state =
+                        await rollSkill(
+                                ((ref.read(constitutionProvider) - 10) ~/ 2),
+                                'none',
+                                " 1d${ref.read(hitDice)} ") +
+                            ref.read(curHealthProvider);
+                    if (ref.read(curHealthProvider) >
+                        ref.read(maxHealthProvider)) {
+                      ref.read(curHealthProvider.notifier).state =
+                          ref.read(maxHealthProvider);
+                    }
+                    ref.read(hitDiceCount.notifier).state =
+                        ref.read(hitDiceCount) - 1;
+                  }
+                },
+                child: const Text("SR"),
+              ),
+              const SizedBox(width: 10),
+              ElevatedButton(
+                style:
+                    ElevatedButton.styleFrom(backgroundColor: Colors.lightBlue),
+                onPressed: () => {
+                  ref.read(initiativeProvider.notifier).state = 0,
+                  ref.read(curHealthProvider.notifier).state =
+                      ref.read(maxHealthProvider),
+                  ref.read(hitDiceCount.notifier).state =
+                      ref.read(levelProvider)
+                },
+                child: const Text("LR"),
+              ),
+            ]),
+            Row(
+              children: const [
+                Text(
+                  "Hit Dice",
+                  style: TextStyle(fontSize: 20),
+                ),
+                SizedBox(width: 12),
+                Expanded(child: Divider(thickness: 1)),
+              ],
+            ),
+            Text("Hitdice Remaining: ${ref.watch(hitDiceCount.state).state}"),
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              ElevatedButton(
+                style:
+                    ElevatedButton.styleFrom(backgroundColor: Colors.lightBlue),
+                onPressed: () =>
+                    {ref.read(hitDice.notifier).state = ref.read(hitDice) - 2},
+                child: const Icon(Icons.exposure_minus_2_sharp),
+              ),
+              const SizedBox(width: 10),
+              Text(
+                "d${ref.watch(hitDice.state).state}",
+                style: const TextStyle(fontSize: 20),
+              ),
+              const SizedBox(width: 10),
+              ElevatedButton(
+                style:
+                    ElevatedButton.styleFrom(backgroundColor: Colors.lightBlue),
+                onPressed: () =>
+                    {ref.read(hitDice.notifier).state = ref.read(hitDice) + 2},
+                child: const Icon(Icons.exposure_plus_2_sharp),
+              ),
+            ]),
+            Row(
+              children: const [
+                Text(
+                  "Free Dice Roll",
+                  style: TextStyle(fontSize: 20),
+                ),
+                SizedBox(width: 12),
+                Expanded(child: Divider(thickness: 1)),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.lightBlue),
+                    onPressed: () async {
+                      ref.read(skillRollProvider.notifier).state = -100;
+                      ref.read(skillRollProvider.notifier).state =
+                          await rollSkill(0, 'none', '1d4');
+                    },
+                    child: const Text("1d4")),
+                const SizedBox(width: 10),
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.lightBlue),
+                    onPressed: () async {
+                      ref.read(skillRollProvider.notifier).state = -100;
+                      ref.read(skillRollProvider.notifier).state =
+                          await rollSkill(0, 'none', '1d6');
+                    },
+                    child: const Text("1d6")),
+                const SizedBox(width: 10),
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.lightBlue),
+                    onPressed: () async {
+                      ref.read(skillRollProvider.notifier).state = -100;
+                      ref.read(skillRollProvider.notifier).state =
+                          await rollSkill(0, 'none', '1d8');
+                    },
+                    child: const Text("1d8")),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.lightBlue),
+                    onPressed: () async {
+                      ref.read(skillRollProvider.notifier).state = -100;
+                      ref.read(skillRollProvider.notifier).state =
+                          await rollSkill(0, 'none', '1d10');
+                    },
+                    child: const Text("1d10")),
+                const SizedBox(width: 10),
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.lightBlue),
+                    onPressed: () async {
+                      ref.read(skillRollProvider.notifier).state = -100;
+                      ref.read(skillRollProvider.notifier).state =
+                          await rollSkill(0, 'none', '1d12');
+                    },
+                    child: const Text("1d12")),
+                const SizedBox(width: 10),
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.lightBlue),
+                    onPressed: () async {
+                      ref.read(skillRollProvider.notifier).state = -100;
+                      ref.read(skillRollProvider.notifier).state =
+                          await rollSkill(0, 'none', '1d20');
+                    },
+                    child: const Text("1d20")),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                    style: const TextStyle(
+                      fontSize: 20.0,
+                    ),
+                    (ref.watch(skillRollProvider) == -100)
+                        ? "Loading"
+                        : "Output: ${ref.watch(skillRollProvider.state).state}"),
+              ],
+            ),
+            Row(
+              children: const [
+                Text(
+                  "Skills",
+                  style: TextStyle(fontSize: 20),
+                ),
+                SizedBox(width: 12),
+                Expanded(child: Divider(thickness: 1)),
+              ],
+            ),
+            ListView.builder(
+                itemCount: skillList.length,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return Button(skillList[index]);
+                })
           ],
-        ),
-        ListView.builder(
-            itemCount: skillList.length,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              return Button(skillList[index]);
-            })
-      ],
-    ));
+        )));
   }
 }
 
@@ -232,7 +241,10 @@ class Button extends ThomasWidget {
               onPressed: () {
                 ref.read(skillProvider.notifier).debumpBonus(skill);
               },
-              child: const Icon(Icons.remove),
+              child: const Text(
+                "-1",
+                style: TextStyle(fontSize: 20),
+              ),
             ),
           ],
         ));
