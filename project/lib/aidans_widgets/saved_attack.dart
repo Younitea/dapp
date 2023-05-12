@@ -1,7 +1,7 @@
-import 'package:flutter/foundation.dart';
 import 'package:hydrated_riverpod/hydrated_riverpod.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../shared/roll_skill.dart';
 import 'dice_parser.dart';
 
@@ -87,6 +87,9 @@ class _SavedAttackState extends ConsumerState<SavedAttack> {
                             child: TextField(
                                 textAlign: TextAlign.center,
                                 controller: _controller,
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(16),
+                                ],
                                 onSubmitted: (value) {
                                   bool shouldClose = true;
                                   String newVal =
