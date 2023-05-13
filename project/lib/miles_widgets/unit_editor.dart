@@ -1,5 +1,4 @@
 import 'package:flutter/services.dart';
-import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'unit_marker.dart';
@@ -48,6 +47,7 @@ class _UnitEditorState extends ConsumerState<UnitEditor> {
     _unit = widget.unitData ??
         UnitData(
             name: "",
+            offset: const Offset(512, 512),
             hp: 100,
             str: 0,
             dex: 0,

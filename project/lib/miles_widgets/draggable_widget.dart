@@ -3,9 +3,13 @@ import 'package:flutter/material.dart';
 class DraggableWidget extends StatefulWidget {
   final Widget child;
   final Offset initialOffset;
+  final Function(Offset) onDrag;
 
-  DraggableWidget(
-      {super.key, required this.child, required this.initialOffset});
+  const DraggableWidget(
+      {super.key,
+      required this.child,
+      required this.initialOffset,
+      required this.onDrag});
 
   @override
   State<StatefulWidget> createState() => _DraggableWidgetState();
@@ -23,10 +27,15 @@ class _DraggableWidgetState extends State<DraggableWidget> {
   void _updatePosition(DragUpdateDetails pointerMoveEvent) {
     double x = _offset.dx + pointerMoveEvent.delta.dx;
     double y = _offset.dy + pointerMoveEvent.delta.dy;
+    final newOffset = Offset(x, y);
 
     setState(() {
-      _offset = Offset(x, y);
+      _offset = newOffset;
     });
+  }
+
+  void _finishDrag(DragEndDetails _) {
+    widget.onDrag(_offset);
   }
 
   @override
@@ -36,6 +45,7 @@ class _DraggableWidgetState extends State<DraggableWidget> {
       left: _offset.dx,
       child: GestureDetector(
         onPanUpdate: _updatePosition,
+        onPanEnd: _finishDrag,
         child: widget.child,
       ),
     );

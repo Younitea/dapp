@@ -4,6 +4,7 @@ import 'draggable_widget.dart';
 
 class UnitData {
   String name;
+  Offset offset;
   int hp;
   int str;
   int dex;
@@ -15,6 +16,7 @@ class UnitData {
 
   UnitData(
       {required this.name,
+      required this.offset,
       required this.hp,
       required this.str,
       required this.dex,
@@ -26,6 +28,7 @@ class UnitData {
 
   UnitData.fromJson(dynamic json)
       : name = json["name"],
+        offset = Offset(json["x"], json["y"]),
         hp = json["hp"],
         str = json["str"],
         dex = json["dex"],
@@ -37,6 +40,8 @@ class UnitData {
 
   Map<String, dynamic> toJson() => {
         "name": name,
+        "x": offset.dx,
+        "y": offset.dy,
         "hp": hp,
         "str": str,
         "dex": dex,
@@ -52,21 +57,26 @@ class UnitMarker extends StatelessWidget {
   const UnitMarker(
       {super.key,
       required this.name,
+      required this.initialOffset,
+      required this.onDrag,
       required this.selected,
       required this.onSelect,
       required this.onPress});
 
+  final Offset initialOffset;
   final String name;
   final bool selected;
+  final Function(Offset) onDrag;
   final Function() onSelect;
   final Function() onPress;
 
   @override
   Widget build(BuildContext context) {
     return DraggableWidget(
-        initialOffset: const Offset(0, 0),
+        initialOffset: initialOffset,
+        onDrag: onDrag,
         child: ElevatedButton(
-          style: ElevatedButton.styleFrom(shape: CircleBorder()),
+          style: ElevatedButton.styleFrom(shape: const CircleBorder()),
           onPressed: () => onPress(),
           onLongPress: () => onSelect(),
           child: Text(name),
