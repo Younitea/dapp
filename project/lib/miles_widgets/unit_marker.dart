@@ -26,6 +26,14 @@ class UnitData {
       required this.cha,
       required this.resistances});
 
+  void setResistance(int idx) {
+    resistances ^= (1 << idx);
+  }
+
+  bool getResistance(int idx) {
+    return (resistances & (1 << idx)) != 0;
+  }
+
   UnitData.fromJson(dynamic json)
       : name = json["name"],
         offset = Offset(json["x"], json["y"]),
@@ -72,11 +80,21 @@ class UnitMarker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var color;
+    if (selected) {
+      color = Colors.red;
+    } else {
+      color = Colors.blue;
+    }
+
     return DraggableWidget(
         initialOffset: initialOffset,
         onDrag: onDrag,
         child: ElevatedButton(
-          style: ElevatedButton.styleFrom(shape: const CircleBorder()),
+          style: ElevatedButton.styleFrom(
+            shape: const CircleBorder(),
+            backgroundColor: color,
+          ),
           onPressed: () => onPress(),
           onLongPress: () => onSelect(),
           child: Text(name),
