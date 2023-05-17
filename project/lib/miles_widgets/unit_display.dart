@@ -1,3 +1,5 @@
+import 'package:project/miles_widgets/unit_attack_widget.dart';
+
 import 'unit_marker.dart';
 import 'package:flutter/material.dart';
 
@@ -41,7 +43,14 @@ class UnitDisplay extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return UnitAttackDialog();
+                    },
+                  );
+                },
                 child: const Text("Attack Roll"),
               ),
             ],

@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 
 import 'miles_widgets/camera_view.dart';
 import 'views/select_view.dart';
-import 'views/player_view.dart';
-import 'views/gm_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,6 +25,6 @@ class MyApp extends StatelessWidget {
         initialRoute: '/',
         routes: {
           '/': (context) => const SelectView(),
-      });
+        });
   }
 }

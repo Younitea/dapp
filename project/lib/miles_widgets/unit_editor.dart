@@ -1,22 +1,40 @@
 import 'package:flutter/services.dart';
-import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'unit_marker.dart';
 import 'package:flutter/material.dart';
 
 class UnitEditor extends ConsumerStatefulWidget {
-  const UnitEditor({super.key, this.unitData, required this.onEdit});
+  const UnitEditor(
+      {super.key, this.unitData, required this.onEdit, required this.onDelete});
 
   final UnitData? unitData;
   final Function(UnitData) onEdit;
+  final Function() onDelete;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _UnitEditorState();
 }
 
+const kResistances = [
+  "Acid",
+  "Cold",
+  "Fire",
+  "Force",
+  "Lightning",
+  "Necrotic",
+  "Poison",
+  "Psychic",
+  "Radiant",
+  "Thunder",
+  "Bludgeoning",
+  "Slashing",
+  "Piercing"
+];
+
 class _UnitEditorState extends ConsumerState<UnitEditor> {
   final _nameController = TextEditingController();
+  final _hpController = TextEditingController();
   final _strController = TextEditingController();
   final _dexController = TextEditingController();
   final _conController = TextEditingController();
@@ -26,28 +44,13 @@ class _UnitEditorState extends ConsumerState<UnitEditor> {
 
   late UnitData _unit;
 
-  static const RESISTANCES = [
-    "Acid",
-    "Cold",
-    "Fire",
-    "Force",
-    "Lightning",
-    "Necrotic",
-    "Poison",
-    "Psychic",
-    "Radiant",
-    "Thunder",
-    "Bludgeoning",
-    "Slashing",
-    "Piercing"
-  ];
-
   @override
   void initState() {
     super.initState();
     _unit = widget.unitData ??
         UnitData(
             name: "",
+            offset: const Offset(512, 512),
             hp: 100,
             str: 0,
             dex: 0,
@@ -58,6 +61,7 @@ class _UnitEditorState extends ConsumerState<UnitEditor> {
             resistances: 0);
 
     _nameController.text = _unit.name.toString();
+    _hpController.text = _unit.hp.toString();
     _strController.text = _unit.str.toString();
     _dexController.text = _unit.dex.toString();
     _conController.text = _unit.con.toString();
@@ -80,12 +84,12 @@ class _UnitEditorState extends ConsumerState<UnitEditor> {
 
   _setResistance(int idx) {
     setState(() {
-      _unit.resistances ^= (1 << idx);
+      _unit.setResistance(idx);
     });
   }
 
   bool _getResistance(int idx) {
-    return (_unit.resistances & (1 << idx)) != 0;
+    return _unit.getResistance(idx);
   }
 
   @override
@@ -110,7 +114,19 @@ class _UnitEditorState extends ConsumerState<UnitEditor> {
                 border: OutlineInputBorder(),
                 labelText: "Name",
               ),
-              // The validator receives the text that the user has entered.
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: _hpController,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: "HP",
+              ),
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(2)
+              ],
             ),
             const SizedBox(height: 32),
             Row(
@@ -172,10 +188,10 @@ class _UnitEditorState extends ConsumerState<UnitEditor> {
             ListView.builder(
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: RESISTANCES.length,
+              itemCount: kResistances.length,
               itemBuilder: (context, i) {
                 return ResistanceImmunitySwitch(
-                  name: RESISTANCES[i],
+                  name: kResistances[i],
                   idx: i,
                   checked: _getResistance,
                   onChanged: _setResistance,
@@ -190,6 +206,7 @@ class _UnitEditorState extends ConsumerState<UnitEditor> {
                   onPressed: () {
                     _unit.name = _nameController.text;
                     _unit.str = int.parse(_strController.text);
+                    _unit.hp = int.parse(_hpController.text);
                     _unit.dex = int.parse(_dexController.text);
                     _unit.con = int.parse(_conController.text);
                     _unit.intt = int.parse(_intController.text);
@@ -206,7 +223,10 @@ class _UnitEditorState extends ConsumerState<UnitEditor> {
                 ElevatedButton(
                   style: const ButtonStyle(
                       backgroundColor: MaterialStatePropertyAll(Colors.red)),
-                  onPressed: () {},
+                  onPressed: () {
+                    widget.onDelete();
+                    Navigator.of(context).pop();
+                  },
                   child: const Text("Delete"),
                 )
               ],

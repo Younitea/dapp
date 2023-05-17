@@ -84,7 +84,6 @@ class _CameraViewState extends State<CameraView> {
                     String path =
                         (await getApplicationDocumentsDirectory()).path;
 
-                    var file = File("$path/image.png");
                     await pic.saveTo("$path/image.png");
 
                     imageCache.clear();
