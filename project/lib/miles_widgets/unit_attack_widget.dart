@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:anydice/anydice.dart';
 import 'package:flutter/material.dart';
 import 'package:project/aidans_widgets/dice_parser.dart';
@@ -36,7 +38,7 @@ class _UnitAttackDialogState extends State<UnitAttackDialog> {
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Text(
-            "condition result: $_conditionResult\ndamage result: $_damageResult",
+            "Attack Roll result: $_conditionResult\ndamage result: $_damageResult",
             style: const TextStyle(fontSize: 18),
           ),
         ),
@@ -61,7 +63,7 @@ class _UnitAttackDialogState extends State<UnitAttackDialog> {
             controller: _modifierController,
             decoration: InputDecoration(
               border: const OutlineInputBorder(),
-              labelText: "Condition",
+              labelText: "Attack Roll",
               errorText: _modifierInvalid ? "Invalid dice string." : null,
             ),
           ),
@@ -110,7 +112,8 @@ class _UnitAttackDialogState extends State<UnitAttackDialog> {
             generateRandomValue(probabilityDistribution))
         .toList();
 
-    _conditionResult = rollResults[0];
+    var intValue = Random().nextInt(20) + 1;
+    _conditionResult = rollResults[0] + intValue;
     _damageResult = rollResults[1];
 
     setState(() {
